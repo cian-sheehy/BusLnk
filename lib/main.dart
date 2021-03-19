@@ -42,6 +42,7 @@ class MainAppState extends State<MainApp> {
         theme: ThemeData(
           brightness: Brightness.light,
           buttonColor: Colors.blueGrey[800],
+          cardColor: Colors.white,
           textTheme: TextTheme(
             headline1: TextStyle(
               color: Colors.black,

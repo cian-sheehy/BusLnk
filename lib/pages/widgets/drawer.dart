@@ -42,6 +42,11 @@ class NavDrawerState extends State<NavDrawer> {
             ),
             Card(
               child: ListTile(
+                onTap: () {
+                  setState(() {
+                    myTheme.switchTheme();
+                  });
+                },
                 leading: Text(
                   'Dark Mode',
                   style: TextStyle(

@@ -417,7 +417,10 @@ class _IndexPageState extends State<IndexPage> {
                                 .map((route) => Card(
                                       color: Theme.of(context).cardColor,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(25),
+                                          bottomRight: Radius.circular(25),
+                                        ),
                                         side: BorderSide(
                                           color: Utils.hexToColor(
                                             route['route_color'].toString(),

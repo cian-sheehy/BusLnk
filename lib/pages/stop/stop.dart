@@ -203,8 +203,11 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                         color: isCancelled
                             ? Colors.red[100]
-                            : Theme.of(context).inputDecorationTheme.fillColor,
-                        borderRadius: BorderRadius.circular(15),
+                            : Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(25),
+                          topRight: Radius.circular(25),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: routeColor,
