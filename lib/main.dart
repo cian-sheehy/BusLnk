@@ -27,13 +27,51 @@ class MainApp extends StatefulWidget {
 
 class MainAppState extends State<MainApp> {
   @override
+  void initState() {
+    super.initState();
+    myTheme.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         onGenerateRoute: _getRoute,
-        theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
-        // darkTheme: ThemeData.dark(),
-        // themeMode: isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          buttonColor: Colors.blueGrey[800],
+          textTheme: TextTheme(
+            headline1: TextStyle(
+              color: Colors.black,
+            ),
+            headline2: TextStyle(
+              color: Color(0xff699b2c),
+            ),
+            subtitle1: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            fillColor: Colors.blueGrey[100],
+          ),
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          primarySwatch: Colors.orange,
+          textTheme: TextTheme(
+            headline2: TextStyle(
+              color: Color(0xff699b2c),
+            ),
+          ),
+          cardColor: Colors.blueGrey[800],
+          buttonColor: Colors.orange[300],
+          inputDecorationTheme: InputDecorationTheme(
+            fillColor: Colors.blueGrey[800],
+          ),
+        ),
+        themeMode: myTheme.currentTheme(),
       );
 }
 

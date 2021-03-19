@@ -59,7 +59,6 @@ class CardWidgetState extends State<CardWidget> with TickerProviderStateMixin {
         width: MediaQuery.of(context).size.width - 10,
         child: Card(
           shape: RoundedRectangleBorder(
-            // borderRadius: BorderRadius.circular(15),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25),
               bottomRight: Radius.circular(25),
@@ -68,7 +67,6 @@ class CardWidgetState extends State<CardWidget> with TickerProviderStateMixin {
               color: Colors.blueGrey[300],
             ),
           ),
-          // color: Colors.white,
           child: ListTile(
             onLongPress: longPressCallback,
             onTap: callback,
@@ -80,14 +78,11 @@ class CardWidgetState extends State<CardWidget> with TickerProviderStateMixin {
             title: Text(
               title,
               style: TextStyle(
-                color: Color(0xff699b2c),
+                color: Theme.of(context).textTheme.headline2.color,
               ),
             ),
             subtitle: Text(
               subtitle,
-              style: TextStyle(
-                color: Colors.blueGrey[800],
-              ),
             ),
           ),
         ),

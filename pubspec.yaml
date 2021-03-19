@@ -1,5 +1,5 @@
 name: bus_lnk
-description: a Bus app for Metlink
+description: Bus app for Metlink
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.1.0
 
@@ -15,7 +15,6 @@ dependencies:
   flutter_map_marker_cluster: ^0.3.4
   fuzzy: 0.3.0
   intl: 0.16.1
-  import_sorter: ^4.4.1
   localstorage: ^3.0.6
   scroll_to_index: ^1.0.6
   url_launcher: 5.7.10

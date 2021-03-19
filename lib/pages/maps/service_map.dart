@@ -121,7 +121,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
 
   Widget getBody() {
     if (isLoading || route.isEmpty || listMarkers.isEmpty) {
-      return JumpingDotsProgressIndicator();
+      return PageLoadingIndicator();
     }
     var isZoomed = widget.arguments.service != null;
     return FlutterMap(

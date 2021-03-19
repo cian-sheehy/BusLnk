@@ -11,13 +11,11 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
         backgroundColor: Colors.blueGrey[800],
         title: Text(
           'BusLnk',
-          // style: TextStyle(
-          //   color: Colors.white,
-          // ),
         ),
         actions: [
           ModalRoute.of(context).settings.name == '/map' ||
-                  ModalRoute.of(context).settings.name == '/stop'
+                  ModalRoute.of(context).settings.name == '/stop' ||
+                  ModalRoute.of(context).settings.name == '/servicemap'
               ? Container()
               : IconButton(
                   icon: Icon(

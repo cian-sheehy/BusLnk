@@ -15,30 +15,44 @@ class NavDrawerState extends State<NavDrawer> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.green,
+            Container(
+              padding: EdgeInsets.only(
+                left: 20,
+                bottom: 20,
+                top: 40,
               ),
-              child: Text(
-                'Settings',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      right: 20,
+                    ),
+                    child: Icon(
+                      Icons.settings,
+                    ),
+                  ),
+                  Text(
+                    'Settings',
+                    style: TextStyle(
+                      fontSize: 25,
+                    ),
+                  ),
+                ],
               ),
             ),
             Card(
               child: ListTile(
                 leading: Text(
                   'Dark Mode',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
                 ),
                 trailing: Switch(
-                  value: isDarkTheme,
+                  value: myTheme.darkTheme,
                   onChanged: (value) {
                     setState(() {
-                      print(isDarkTheme);
-                      isDarkTheme = value;
-                      print(isDarkTheme);
+                      myTheme.switchTheme();
                     });
                   },
                 ),

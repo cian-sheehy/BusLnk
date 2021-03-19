@@ -12,36 +12,35 @@ class _JumpingDot extends AnimatedWidget {
       child: Icon(
         Icons.directions_bus_rounded,
         size: 50,
-        color: Colors.blueGrey[800],
+        color: Theme.of(context).buttonColor,
       ),
     );
   }
 }
 
-class JumpingDotsProgressIndicator extends StatefulWidget {
+class PageLoadingIndicator extends StatefulWidget {
   final int numberOfDots;
   final double dotSpacing;
   final int milliseconds;
   final double beginTweenValue = 0.0;
   final double endTweenValue = 15;
 
-  const JumpingDotsProgressIndicator({
+  const PageLoadingIndicator({
     this.numberOfDots = 5,
     this.dotSpacing = 5,
     this.milliseconds = 200,
   });
 
   @override
-  _JumpingDotsProgressIndicatorState createState() =>
-      _JumpingDotsProgressIndicatorState(
+  _PageLoadingIndicatorState createState() => _PageLoadingIndicatorState(
         numberOfDots: numberOfDots,
         dotSpacing: dotSpacing,
         milliseconds: milliseconds,
       );
 }
 
-class _JumpingDotsProgressIndicatorState
-    extends State<JumpingDotsProgressIndicator> with TickerProviderStateMixin {
+class _PageLoadingIndicatorState extends State<PageLoadingIndicator>
+    with TickerProviderStateMixin {
   int numberOfDots;
   int milliseconds;
   double dotSpacing;
@@ -49,7 +48,7 @@ class _JumpingDotsProgressIndicatorState
   List<Animation<double>> animations = <Animation<double>>[];
   final List<Widget> _widgets = <Widget>[];
 
-  _JumpingDotsProgressIndicatorState({
+  _PageLoadingIndicatorState({
     this.numberOfDots,
     this.dotSpacing,
     this.milliseconds,

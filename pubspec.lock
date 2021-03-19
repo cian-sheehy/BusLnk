@@ -99,13 +99,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
-  colorize:
-    dependency: transitive
-    description:
-      name: colorize
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   console_log_handler:
     dependency: transitive
     description:
@@ -240,13 +233,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
-  import_sorter:
-    dependency: "direct main"
-    description:
-      name: import_sorter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.4.1"
   intl:
     dependency: "direct main"
     description:

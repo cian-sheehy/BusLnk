@@ -40,10 +40,7 @@ class _IndexPageState extends State<IndexPage> {
   @override
   void initState() {
     super.initState();
-    // currentTheme.addListener(() {
-    //   print('Them changes');
-    //   setState(() {});
-    // });
+
     Dio().interceptors.add(
           DioCacheManager(
             CacheConfig(
@@ -160,7 +157,7 @@ class _IndexPageState extends State<IndexPage> {
                     fetchStopList();
                   });
                 },
-                backgroundColor: Colors.blueGrey[800],
+                backgroundColor: Theme.of(context).buttonColor,
                 child: Icon(
                   Icons.delete,
                 ),
@@ -264,7 +261,7 @@ class _IndexPageState extends State<IndexPage> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null || stops.contains(null) || stops.isEmpty) {
             return Center(
-              child: JumpingDotsProgressIndicator(),
+              child: PageLoadingIndicator(),
             );
           }
           _getItems();
@@ -280,14 +277,8 @@ class _IndexPageState extends State<IndexPage> {
                 child: Container(
                   padding: EdgeInsets.only(left: 15, top: 5),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).inputDecorationTheme.fillColor,
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blueGrey[300],
-                        spreadRadius: 1,
-                      ),
-                    ],
                   ),
                   child: TextField(
                     enabled: !isLoading,
@@ -330,16 +321,6 @@ class _IndexPageState extends State<IndexPage> {
                   ),
                 ),
               ),
-              Switch(
-                value: isDarkTheme,
-                onChanged: (value) {
-                  setState(() {
-                    print(isDarkTheme);
-                    isDarkTheme = value;
-                    print(isDarkTheme);
-                  });
-                },
-              ),
               Container(
                 height: 50,
                 child: ButtonBar(
@@ -352,12 +333,9 @@ class _IndexPageState extends State<IndexPage> {
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide(
-                                    color: Colors.blueGrey[300],
-                                  ),
                                 ),
                                 primary: showFavourites
-                                    ? Colors.blueGrey[200]
+                                    ? Theme.of(context).buttonColor
                                     : Colors.blueGrey[500],
                               ),
                               onPressed: () {
@@ -370,7 +348,7 @@ class _IndexPageState extends State<IndexPage> {
                               child: Text(
                                 'Favourites (${favouriteList.items.length})',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
@@ -382,21 +360,20 @@ class _IndexPageState extends State<IndexPage> {
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: Colors.blueGrey[300],
-                            ),
                           ),
                           primary: showStopData
-                              ? Colors.blueGrey[200]
+                              ? Theme.of(context).buttonColor
                               : Colors.blueGrey[500],
                         ),
                         onPressed: () {
                           fetchStopList();
                         },
                         child: Text(
-                          'Stops',
+                          _textController.text.isNotEmpty && showStopData
+                              ? 'Stops (${newStops.length})'
+                              : 'Stops',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -407,21 +384,20 @@ class _IndexPageState extends State<IndexPage> {
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: Colors.blueGrey[300],
-                            ),
                           ),
                           primary: showRouteData
-                              ? Colors.blueGrey[200]
+                              ? Theme.of(context).buttonColor
                               : Colors.blueGrey[500],
                         ),
                         onPressed: () {
                           fetchRouteList();
                         },
                         child: Text(
-                          'Routes',
+                          _textController.text.isNotEmpty && showRouteData
+                              ? 'Routes (${newStops.length})'
+                              : 'Routes',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -429,18 +405,8 @@ class _IndexPageState extends State<IndexPage> {
                   ],
                 ),
               ),
-              showStopData && !isLoading
-                  ? Text(
-                      '${newStops.length} stops',
-                    )
-                  : Container(),
-              showRouteData && !isLoading
-                  ? Text(
-                      '${newRoutes.length} routes',
-                    )
-                  : Container(),
               isLoading
-                  ? JumpingDotsProgressIndicator()
+                  ? PageLoadingIndicator()
                   : Flexible(
                       child: ListView(
                         shrinkWrap: true,
@@ -449,12 +415,14 @@ class _IndexPageState extends State<IndexPage> {
                         children: showRouteData
                             ? newRoutes
                                 .map((route) => Card(
+                                      color: Theme.of(context).cardColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(15),
                                         side: BorderSide(
                                           color: Utils.hexToColor(
                                             route['route_color'].toString(),
                                           ),
+                                          width: 2,
                                         ),
                                       ),
                                       child: ListTile(
@@ -471,7 +439,7 @@ class _IndexPageState extends State<IndexPage> {
                                         },
                                         trailing: Icon(
                                           Icons.alt_route_rounded,
-                                          color: Colors.blueGrey[800],
+                                          color: Theme.of(context).buttonColor,
                                         ),
                                         leading: Container(
                                           width: 40,
@@ -493,12 +461,8 @@ class _IndexPageState extends State<IndexPage> {
                                               textAlign: TextAlign.center,
                                               // set some style to text
                                               style: TextStyle(
-                                                fontSize: 15,
-                                                color: Utils.hexToColor(
-                                                  route['route_text_color']
-                                                      .toString(),
-                                                ),
-                                              ),
+                                                  fontSize: 15,
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -507,9 +471,10 @@ class _IndexPageState extends State<IndexPage> {
                                             text: route['route_long_name']
                                                 .toString(),
                                             style: TextStyle(
-                                              color: Utils.hexToColor(
-                                                route['route_color'].toString(),
-                                              ),
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1
+                                                  .color,
                                             ),
                                           ),
                                         ),
@@ -569,6 +534,7 @@ class _IndexPageState extends State<IndexPage> {
                                           stopExistsInFavourites
                                               ? Icons.star
                                               : Icons.star_border,
+                                          color: Theme.of(context).buttonColor,
                                         ),
                                       ),
                                       callback: () async {
@@ -597,6 +563,7 @@ class _IndexPageState extends State<IndexPage> {
                                       leadingIcon: Icon(
                                         Icons.directions_bus_rounded,
                                         color: Color(0xff699b2c),
+                                        size: 30,
                                       ),
                                       trailingIcon: IconButton(
                                         onPressed: () {
@@ -620,6 +587,7 @@ class _IndexPageState extends State<IndexPage> {
                                           stopExistsInFavourites
                                               ? Icons.star
                                               : Icons.star_border,
+                                          color: Theme.of(context).buttonColor,
                                         ),
                                       ),
                                       callback: () async {

@@ -99,7 +99,7 @@ class StopsMapWidgetState extends State<StopsMapWidget>
 
   Widget getBody() {
     if (isLoading || stops.isEmpty || listMarkers.isEmpty) {
-      return JumpingDotsProgressIndicator();
+      return PageLoadingIndicator();
     }
     return FlutterMap(
       options: MapOptions(

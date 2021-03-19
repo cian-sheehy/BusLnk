@@ -107,7 +107,7 @@ class RouteWidgetState extends State<RouteWidget>
 
   Widget getBody() {
     if (isLoading || route == null || route.isEmpty) {
-      return JumpingDotsProgressIndicator();
+      return PageLoadingIndicator();
     }
     return Column(
       children: <Widget>[

@@ -100,7 +100,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
 
   Widget getBody() {
     if (stopInfo == null || stopInfo.length == 0) {
-      return JumpingDotsProgressIndicator();
+      return PageLoadingIndicator();
     }
     if ((services == null || services.isEmpty || routes == null) &&
         !isLoading) {
@@ -125,7 +125,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
             icon: Icon(
               Icons.map_rounded,
               size: 30,
-              color: Colors.blueGrey[800],
+              color: Theme.of(context).buttonColor,
             ),
             onPressed: () async {
               await Navigator.pushNamed(
@@ -143,7 +143,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
           ),
         ),
         isLoading
-            ? JumpingDotsProgressIndicator()
+            ? PageLoadingIndicator()
             : Expanded(
                 child: ListView(
                   key: UniqueKey(),
@@ -201,12 +201,14 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                         bottom: 15,
                       ),
                       decoration: BoxDecoration(
-                        color: isCancelled ? Colors.red[100] : Colors.white,
+                        color: isCancelled
+                            ? Colors.red[100]
+                            : Theme.of(context).inputDecorationTheme.fillColor,
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
                             color: routeColor,
-                            spreadRadius: 1,
+                            spreadRadius: 2,
                           ),
                         ],
                       ),
@@ -235,9 +237,6 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                               child: Text(
                                 _formattedDate,
                                 textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: Colors.blueGrey[800],
-                                ),
                               ),
                             ),
                             Padding(
@@ -271,10 +270,8 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                                     child: Text(
                                       service['destination']['name'].toString(),
                                       textAlign: TextAlign.left,
-                                      // set some style to text
                                       style: TextStyle(
                                         fontSize: 16,
-                                        color: Colors.blueGrey[800],
                                       ),
                                     ),
                                   ),
@@ -301,7 +298,6 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                               fontSize: 20,
-                                              color: Colors.blueGrey[800],
                                             ),
                                           ),
                                         )
@@ -315,15 +311,8 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                                                 bottom: 5,
                                               ),
                                               decoration: BoxDecoration(
-                                                // color: Colors.white,
                                                 borderRadius:
                                                     BorderRadius.circular(15),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.blueGrey[800],
-                                                    spreadRadius: 1,
-                                                  ),
-                                                ],
                                               ),
                                               child: Center(
                                                 child: Text(
@@ -337,56 +326,48 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                                                               _time),
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.blueGrey[800],
+                                                    fontSize: 16,
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                            isOnTime
-                                                ? Container()
-                                                : Container(
-                                                    width: 75,
-                                                    height: 30,
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                      left: 5,
-                                                      top: 5,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: Utils
-                                                          .calculateStatusColour(
-                                                        service['status']
-                                                            .toString(),
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors
-                                                              .blueGrey[800],
-                                                          spreadRadius: 1,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        !isExpected
-                                                            ? service['status']
-                                                                .toString()
-                                                                .capitalise()
-                                                            : 'SCHED',
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors
-                                                              .blueGrey[800],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
+                                            // isOnTime
+                                            //     ? Container()
+                                            //     : Container(
+                                            //         width: 75,
+                                            //         height: 30,
+                                            //         margin:
+                                            //             const EdgeInsets.only(
+                                            //           left: 5,
+                                            //           top: 5,
+                                            //         ),
+                                            //         decoration: BoxDecoration(
+                                            //           color: Utils
+                                            //               .calculateStatusColour(
+                                            //             service['status']
+                                            //                 .toString(),
+                                            //           ),
+                                            //           borderRadius:
+                                            //               BorderRadius.circular(
+                                            //                   15),
+                                            //         ),
+                                            //         child: Center(
+                                            //           child: Text(
+                                            //             !isExpected
+                                            //                 ? service['status']
+                                            //                     .toString()
+                                            //                     .capitalise()
+                                            //                 : 'SCHED',
+                                            //             textAlign:
+                                            //                 TextAlign.left,
+                                            //             style: TextStyle(
+                                            //               fontSize: 16,
+                                            //               color: Colors
+                                            //                   .blueGrey[800],
+                                            //             ),
+                                            //           ),
+                                            //         ),
+                                            //       ),
                                           ],
                                         ),
                                 ],
