@@ -50,7 +50,7 @@ class MainAppState extends State<MainApp> {
           buttonColor: Colors.teal[800],
           cardTheme: CardTheme(
             shadowColor: Colors.blueGrey[800],
-            elevation: 5,
+            elevation: 2.5,
             color: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
@@ -101,7 +101,7 @@ class MainAppState extends State<MainApp> {
           ),
           cardTheme: CardTheme(
             shadowColor: Colors.purple[100],
-            elevation: 5,
+            elevation: 2.5,
             color: Colors.blueGrey[800],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(

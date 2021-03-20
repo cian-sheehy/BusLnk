@@ -57,65 +57,60 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
   }
 
   void fetchStop() async {
-    setState(() {
-      isLoading = true;
-      stopNumber = widget.arguments.stopNumber;
-      lastUpdated = Utils.getCurrentTime();
-      stopInfo = [];
-      routes = [];
-      services = [];
-      alerts = [];
-      serviceAlerts = [];
-    });
-
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+        stopNumber = widget.arguments.stopNumber;
+        lastUpdated = Utils.getCurrentTime();
+        stopInfo = [];
+        routes = [];
+        services = [];
+        alerts = [];
+        serviceAlerts = [];
+      });
+    }
     // Get stop information
     var stopData = await getRequest(
       '$backendApiBaseUrl/stops/${widget.arguments.stopNumber}',
     );
-    setState(() {
-      stopInfo = stopData;
-    });
-
     // Get route information
     var routeData = await getRequest(
       '$openApiBaseUrl/routes',
     );
-    setState(() {
-      routes = routeData as List<dynamic>;
-    });
-
     // Get route information
     var serviceAlertData = await getRequest(
       '$openRealTimeApiBaseUrl/servicealerts',
     );
-    setState(() {
-      serviceAlerts = serviceAlertData['entity'] as List<dynamic>;
-      if (serviceAlerts.isNotEmpty) {
-        for (var entity in serviceAlerts) {
-          var alert = entity['alert'];
-          if (alert.containsKey('informed_entity')) {
-            alert['informed_entity'].where((a) {
-              if (a.containsKey('stop_id')) {
-                if (a['stop_id'].toLowerCase() == stopInfo['stop_id']) {
-                  alerts.add(alert);
-                  return true;
-                }
-              }
-              return false;
-            }).toList();
-          }
-        }
-      }
-    });
-
     // Get depatures
     var depaturesData = await getRequest(
       '$backendApiBaseUrl/stopdepartures/${widget.arguments.stopNumber}',
     );
-    setState(() {
-      services = depaturesData['departures'] as List<dynamic>;
-      isLoading = false;
-    });
+
+    if (mounted) {
+      setState(() {
+        stopInfo = stopData;
+        routes = routeData as List<dynamic>;
+        serviceAlerts = serviceAlertData['entity'] as List<dynamic>;
+        services = depaturesData['departures'] as List<dynamic>;
+        if (serviceAlerts.isNotEmpty) {
+          for (var entity in serviceAlerts) {
+            var alert = entity['alert'];
+            if (alert.containsKey('informed_entity')) {
+              alert['informed_entity'].where((a) {
+                if (a.containsKey('stop_id')) {
+                  if (a['stop_id'].toLowerCase() == stopInfo['stop_id']) {
+                    alerts.add(alert);
+                    return true;
+                  }
+                }
+                return false;
+              }).toList();
+            }
+          }
+        }
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -161,7 +156,6 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
             icon: Icon(
               Icons.map_rounded,
               size: 30,
-              color: Theme.of(context).buttonColor,
             ),
             onPressed: () async {
               await Navigator.pushNamed(
@@ -191,7 +185,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                     var currentIndex = index + 1;
                     var text =
                         alerts[index]['header_text']['translation'][0]['text'];
-                    print(alerts[index]);
+
                     return Card(
                       color: myTheme.currentTheme() == ThemeMode.dark
                           ? Colors.blueGrey[500]
@@ -268,7 +262,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                     var routeColor = Colors.blue[600];
                     var routeTextColor = Colors.white;
 
-                    if (route.length > 0 != null) {
+                    if (route.isNotEmpty) {
                       routeColor =
                           Utils.hexToColor(route[0]['route_color'].toString());
                       routeTextColor = Utils.hexToColor(
@@ -300,7 +294,6 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                       ),
                       child: ListTile(
                         onTap: () async {
-                          print(service);
                           await Navigator.pushNamed(
                             _scaffoldkey.currentContext,
                             '/servicemap',

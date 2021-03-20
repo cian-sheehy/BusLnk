@@ -30,6 +30,7 @@ class _IndexPageState extends State<IndexPage> {
   bool showRouteData = false;
   bool showStopData = false;
   bool showFavourites = false;
+  bool _validate = false;
 
   FavouriteItem _editingFavItem;
 
@@ -55,6 +56,11 @@ class _IndexPageState extends State<IndexPage> {
   @override
   void dispose() {
     _textController.dispose();
+    _popUpTextController.dispose();
+    newRoutes.clear();
+    newStops.clear();
+    stops.clear();
+    routes.clear();
     super.dispose();
   }
 
@@ -68,6 +74,9 @@ class _IndexPageState extends State<IndexPage> {
               autofocus: true,
               keyboardType: TextInputType.text,
               controller: _popUpTextController,
+              decoration: InputDecoration(
+                hintText: 'Enter custon name',
+              ),
             )
           ],
         ),
@@ -80,11 +89,18 @@ class _IndexPageState extends State<IndexPage> {
           ),
           TextButton(
             onPressed: () {
-              _updateItem(
-                _editingFavItem,
-                _popUpTextController.text.trim(),
-              );
-              Navigator.of(context).pop();
+              setState(() {
+                _popUpTextController.text.isEmpty
+                    ? _validate = true
+                    : _validate = false;
+              });
+              if (!_validate) {
+                _updateItem(
+                  _editingFavItem,
+                  _popUpTextController.text.trim(),
+                );
+                Navigator.of(context).pop();
+              }
             },
             child: Text('Save'),
           ),
@@ -256,6 +272,17 @@ class _IndexPageState extends State<IndexPage> {
     });
   }
 
+  void reorderData(int oldindex, int newindex) {
+    setState(() {
+      if (newindex > oldindex) {
+        newindex -= 1;
+      }
+      final items = favouriteList.items.removeAt(oldindex);
+      favouriteList.items.insert(newindex, items);
+      _saveToStorage();
+    });
+  }
+
   Widget getBody() => FutureBuilder(
         future: storage.ready,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -418,92 +445,98 @@ class _IndexPageState extends State<IndexPage> {
               isLoading
                   ? PageLoadingIndicator()
                   : Flexible(
-                      child: ListView(
-                        shrinkWrap: true,
-                        key: UniqueKey(),
-                        padding: EdgeInsets.all(12.0),
-                        children: showRouteData
-                            ? newRoutes
-                                .map((route) => Card(
-                                      color: Theme.of(context).cardColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(25),
-                                          bottomRight: Radius.circular(25),
-                                        ),
-                                        side: BorderSide(
-                                          color: Utils.hexToColor(
-                                            route['route_color'].toString(),
+                      child: showRouteData
+                          ? ListView(
+                              shrinkWrap: true,
+                              key: UniqueKey(),
+                              padding: EdgeInsets.all(12.0),
+                              children: newRoutes
+                                  .map((route) => Card(
+                                        color: Theme.of(context).cardColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(25),
+                                            bottomRight: Radius.circular(25),
                                           ),
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: ListTile(
-                                        onTap: () async {
-                                          print(route);
-                                          await Navigator.pushNamed(
-                                            _scaffoldkey.currentContext,
-                                            '/servicemap',
-                                            arguments: ServiceMapArguments(
-                                              route['route_id'].toString(),
-                                              null,
-                                            ),
-                                          );
-                                        },
-                                        leading: Container(
-                                          width: 40,
-                                          height: 40,
-                                          decoration: BoxDecoration(
+                                          side: BorderSide(
                                             color: Utils.hexToColor(
                                               route['route_color'].toString(),
                                             ),
-                                            shape: BoxShape.circle,
+                                            width: 2,
                                           ),
-                                          margin: EdgeInsets.only(
-                                            right: 10,
+                                        ),
+                                        child: ListTile(
+                                          onTap: () async {
+                                            await Navigator.pushNamed(
+                                              _scaffoldkey.currentContext,
+                                              '/servicemap',
+                                              arguments: ServiceMapArguments(
+                                                route['route_id'].toString(),
+                                                null,
+                                              ),
+                                            );
+                                          },
+                                          leading: Container(
+                                            width: 40,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: Utils.hexToColor(
+                                                route['route_color'].toString(),
+                                              ),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            margin: EdgeInsets.only(
+                                              right: 10,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                // Read the name field value and set it in the Text widget
+                                                route['route_short_name']
+                                                    .toString(),
+                                                textAlign: TextAlign.center,
+                                                // set some style to text
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          child: Center(
-                                            child: Text(
-                                              // Read the name field value and set it in the Text widget
-                                              route['route_short_name']
+                                          title: RichText(
+                                            text: TextSpan(
+                                              text: route['route_long_name']
                                                   .toString(),
-                                              textAlign: TextAlign.center,
-                                              // set some style to text
                                               style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .headline1
+                                                    .color,
                                               ),
                                             ),
                                           ),
                                         ),
-                                        title: RichText(
-                                          text: TextSpan(
-                                            text: route['route_long_name']
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .headline1
-                                                  .color,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ))
-                                .toList()
-                            : showFavourites
-                                ? favouriteList.items.map((favourite) {
+                                      ))
+                                  .toList(),
+                            )
+                          : showFavourites
+                              ? ReorderableListView(
+                                  onReorder: reorderData,
+                                  shrinkWrap: true,
+                                  // key: UniqueKey(),
+                                  padding: EdgeInsets.all(12.0),
+                                  children:
+                                      favouriteList.items.map((favourite) {
                                     var stopExistsInFavourites =
                                         favouriteList.items.any(
                                       (file) =>
                                           file.stopNum == favourite.stopNum,
                                     );
                                     return CardWidget(
+                                      key: ValueKey(favourite),
                                       title: favourite.stopName,
                                       subtitle: favourite.stopNum,
                                       trailingIcon: IconButton(
                                         onPressed: () {
-                                          print(favourite);
                                           _popUpTextController =
                                               TextEditingController(
                                             text: favourite.stopName,
@@ -523,7 +556,6 @@ class _IndexPageState extends State<IndexPage> {
                                       ),
                                       leadingIcon: IconButton(
                                         onPressed: () {
-                                          print(favourite);
                                           setState(() {
                                             if (stopExistsInFavourites) {
                                               _remoteItem(
@@ -550,7 +582,6 @@ class _IndexPageState extends State<IndexPage> {
                                         ),
                                       ),
                                       callback: () async {
-                                        print(favourite.stopName);
                                         await Navigator.pushNamed(
                                           _scaffoldkey.currentContext,
                                           '/stop',
@@ -561,8 +592,13 @@ class _IndexPageState extends State<IndexPage> {
                                         );
                                       },
                                     );
-                                  }).toList()
-                                : newStops.map((stop) {
+                                  }).toList(),
+                                )
+                              : ListView(
+                                  shrinkWrap: true,
+                                  key: UniqueKey(),
+                                  padding: EdgeInsets.all(12.0),
+                                  children: newStops.map((stop) {
                                     var stopExistsInFavourites =
                                         favouriteList.items.any(
                                       (file) =>
@@ -581,7 +617,6 @@ class _IndexPageState extends State<IndexPage> {
                                       ),
                                       trailingIcon: IconButton(
                                         onPressed: () {
-                                          print(stop);
                                           setState(() {
                                             if (stopExistsInFavourites) {
                                               _remoteItem(
@@ -605,7 +640,6 @@ class _IndexPageState extends State<IndexPage> {
                                         ),
                                       ),
                                       callback: () async {
-                                        print(stop);
                                         await Navigator.pushNamed(
                                           _scaffoldkey.currentContext,
                                           '/stop',
@@ -617,8 +651,7 @@ class _IndexPageState extends State<IndexPage> {
                                       },
                                     );
                                   }).toList(),
-                      ),
-                    )
+                                )),
             ],
           );
         },

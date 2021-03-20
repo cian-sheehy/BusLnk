@@ -11,6 +11,16 @@ class NavDrawer extends StatefulWidget {
 
 class NavDrawerState extends State<NavDrawer> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => Drawer(
         child: Column(
           children: <Widget>[

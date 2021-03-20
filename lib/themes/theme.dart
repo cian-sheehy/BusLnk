@@ -16,7 +16,6 @@ class MyTheme with ChangeNotifier {
         );
       }
       _isDark = storage.getItem('currentTheme');
-      print(_isDark);
       notifyListeners();
     });
   }

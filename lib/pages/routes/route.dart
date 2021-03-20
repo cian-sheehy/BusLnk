@@ -139,9 +139,7 @@ class RouteWidgetState extends State<RouteWidget>
                                   ? Colors.deepPurple[300]
                                   : colourCode,
                             ),
-                            onPressed: () {
-                              print(stop);
-                            },
+                            onPressed: null,
                           ),
                         ),
                         Flexible(
