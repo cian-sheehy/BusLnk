@@ -212,7 +212,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
                   title: Text(
                     '${mapMarkers[marker]['stop_name']}',
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.headline2.color,
+                      color: Theme.of(context).textTheme.headline1.color,
                       fontSize: 14,
                     ),
                   ),
@@ -233,7 +233,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
             child: Text(
               markers.length.toString(),
               style: TextStyle(
-                color: Theme.of(context).textTheme.subtitle1.color,
+                color: Theme.of(context).textTheme.subtitle2.color,
               ),
             ),
           ),

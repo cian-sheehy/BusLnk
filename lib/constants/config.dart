@@ -4,6 +4,7 @@ import 'package:localstorage/localstorage.dart';
 import '../themes/theme.dart';
 
 const openApiBaseUrl = 'https://api.opendata.metlink.org.nz/v1/gtfs';
+const openRealTimeApiBaseUrl = 'https://api.opendata.metlink.org.nz/v1/gtfs-rt';
 const backendApiBaseUrl = 'https://backend.metlink.org.nz/api/v1';
 
 Options headerOptions = Options(

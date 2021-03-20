@@ -69,6 +69,9 @@ class MainAppState extends State<MainApp> {
             subtitle1: TextStyle(
               color: Colors.blueGrey[800],
             ),
+            subtitle2: TextStyle(
+              color: Colors.white,
+            ),
           ),
           inputDecorationTheme: InputDecorationTheme(
             fillColor: Colors.blueGrey[100],

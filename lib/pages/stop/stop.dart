@@ -33,7 +33,9 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
   final GlobalKey _scaffoldkey = GlobalKey();
   List services = [];
   List routes = [];
+  List alerts = [];
   dynamic stopInfo;
+  dynamic serviceAlerts;
   bool isLoading = false;
   String lastUpdated;
   String stopNumber;
@@ -46,6 +48,11 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    routes.clear();
+    services.clear();
+    alerts.clear();
+    serviceAlerts.clear();
+    stopInfo.clear();
     super.dispose();
   }
 
@@ -57,6 +64,8 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
       stopInfo = [];
       routes = [];
       services = [];
+      alerts = [];
+      serviceAlerts = [];
     });
 
     // Get stop information
@@ -73,6 +82,30 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
     );
     setState(() {
       routes = routeData as List<dynamic>;
+    });
+
+    // Get route information
+    var serviceAlertData = await getRequest(
+      '$openRealTimeApiBaseUrl/servicealerts',
+    );
+    setState(() {
+      serviceAlerts = serviceAlertData['entity'] as List<dynamic>;
+      if (serviceAlerts.isNotEmpty) {
+        for (var entity in serviceAlerts) {
+          var alert = entity['alert'];
+          if (alert.containsKey('informed_entity')) {
+            alert['informed_entity'].where((a) {
+              if (a.containsKey('stop_id')) {
+                if (a['stop_id'].toLowerCase() == stopInfo['stop_id']) {
+                  alerts.add(alert);
+                  return true;
+                }
+              }
+              return false;
+            }).toList();
+          }
+        }
+      }
     });
 
     // Get depatures
@@ -98,15 +131,19 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
       );
 
   Widget getBody() {
-    if (stopInfo == null || stopInfo.length == 0) {
+    if (stopInfo == null || stopInfo.length == 0 || serviceAlerts == null) {
       return PageLoadingIndicator();
     }
     if ((services == null || services.isEmpty || routes == null) &&
         !isLoading) {
-      return NoStopInformationWidget(
-        stopNumber: stopNumber,
-        stopName: stopInfo['stop_name'].toString(),
-        lastUpdated: lastUpdated,
+      return Column(
+        children: <Widget>[
+          NoStopInformationWidget(
+            stopNumber: stopNumber,
+            stopName: stopInfo['stop_name'].toString(),
+            lastUpdated: lastUpdated,
+          )
+        ],
       );
     }
     String _newFormattedDate;
@@ -141,6 +178,54 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
             },
           ),
         ),
+        alerts.isEmpty
+            ? Container()
+            : Container(
+                height: 70,
+                width: MediaQuery.of(context).size.width - 10,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: alerts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var count = alerts.length;
+                    var currentIndex = index + 1;
+                    var text =
+                        alerts[index]['header_text']['translation'][0]['text'];
+                    print(alerts[index]);
+                    return Card(
+                      color: myTheme.currentTheme() == ThemeMode.dark
+                          ? Colors.blueGrey[500]
+                          : Colors.orange[300],
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        child: TextButton.icon(
+                          onPressed: null,
+                          icon: Icon(
+                            Icons.error_outline,
+                            color: myTheme.currentTheme() == ThemeMode.dark
+                                ? Colors.orange[400]
+                                : Colors.blueGrey[800],
+                          ),
+                          label: Flexible(
+                            child: Text(
+                              '$text ${'($currentIndex/$count)'}',
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: myTheme.currentTheme() == ThemeMode.dark
+                                    ? Colors.orange[400]
+                                    : Colors.blueGrey[800],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
         isLoading
             ? PageLoadingIndicator()
             : Expanded(

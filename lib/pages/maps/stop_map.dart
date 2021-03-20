@@ -204,7 +204,7 @@ class StopsMapWidgetState extends State<StopsMapWidget>
             child: Text(
               markers.length.toString(),
               style: TextStyle(
-                color: Theme.of(context).textTheme.subtitle1.color,
+                color: Theme.of(context).textTheme.subtitle2.color,
               ),
             ),
           ),
