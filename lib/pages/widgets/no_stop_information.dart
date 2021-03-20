@@ -62,18 +62,18 @@ class NoStopInformationWidgetState extends State<NoStopInformationWidget>
                   'No service information for stop $stopNumber',
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                    color: Color(0xff699b2c),
+                    color: Theme.of(context).textTheme.headline2.color,
                   ),
                 ),
                 subtitle: Text(
                   'Try again later or press the button for more information',
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                    color: Colors.blueGrey[800],
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
                 trailing: IconButton(
-                  color: Color(0xff699b2c),
+                  color: Theme.of(context).textTheme.headline2.color,
                   icon: Icon(
                     Icons.open_in_browser_rounded,
                     size: 40,

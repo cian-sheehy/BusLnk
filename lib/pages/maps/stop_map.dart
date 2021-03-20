@@ -56,6 +56,9 @@ class StopsMapWidgetState extends State<StopsMapWidget>
 
   @override
   void dispose() {
+    stops.clear();
+    listMarkers.clear();
+    mapMarkers.clear();
     super.dispose();
   }
 
@@ -79,7 +82,7 @@ class StopsMapWidgetState extends State<StopsMapWidget>
           ),
           builder: (ctx) => Icon(
             Icons.directions_bus_rounded,
-            color: Colors.blueGrey[800],
+            color: Theme.of(context).primaryColor,
             size: 40,
           ),
         );
@@ -144,9 +147,8 @@ class StopsMapWidgetState extends State<StopsMapWidget>
           ),
           markers: mapMarkers.keys.toList(),
           polygonOptions: PolygonOptions(
-            borderColor: Colors.blueGrey[800],
-            color: Colors.blueGrey[300],
-            borderStrokeWidth: 3,
+            color: Colors.transparent,
+            borderColor: Colors.transparent,
           ),
           popupOptions: PopupOptions(
             popupController: _popupController,
@@ -158,18 +160,13 @@ class StopsMapWidgetState extends State<StopsMapWidget>
               width: 200,
               height: 100,
               child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(
-                    color: Colors.blueGrey[300],
-                  ),
-                ),
-                color: Colors.white,
+                shape: Theme.of(context).cardTheme.shape,
+                color: Theme.of(context).cardTheme.color,
                 child: ListTile(
                   trailing: IconButton(
                     icon: Icon(
                       Icons.open_in_browser_rounded,
-                      color: Colors.blueGrey[800],
+                      color: Theme.of(context).toggleButtonsTheme.selectedColor,
                     ),
                     onPressed: () async {
                       var stop = mapMarkers[marker];
@@ -186,14 +183,14 @@ class StopsMapWidgetState extends State<StopsMapWidget>
                   title: Text(
                     '${mapMarkers[marker]['stop_name']}',
                     style: TextStyle(
-                      color: Color(0xff699b2c),
+                      color: Theme.of(context).textTheme.headline1.color,
                       fontSize: 14,
                     ),
                   ),
                   subtitle: Text(
                     '${mapMarkers[marker]['stop_code']}',
                     style: TextStyle(
-                      color: Colors.blueGrey[800],
+                      color: Theme.of(context).textTheme.subtitle1.color,
                     ),
                   ),
                 ),
@@ -203,9 +200,12 @@ class StopsMapWidgetState extends State<StopsMapWidget>
           builder: (context, markers) => FloatingActionButton(
             heroTag: 'stop_hero_tag_${markers.length.toString()}',
             onPressed: null,
-            backgroundColor: Colors.blueGrey[800],
+            backgroundColor: Theme.of(context).primaryColor,
             child: Text(
               markers.length.toString(),
+              style: TextStyle(
+                color: Theme.of(context).textTheme.subtitle1.color,
+              ),
             ),
           ),
         ),

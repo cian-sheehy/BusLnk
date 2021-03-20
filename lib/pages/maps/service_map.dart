@@ -84,7 +84,9 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
           ),
           builder: (ctx) => Icon(
             Icons.directions_bus_rounded,
-            color: isCurrentStop ? Colors.yellow[900] : Colors.blueGrey[800],
+            color: isCurrentStop
+                ? Colors.yellow[900]
+                : Theme.of(context).primaryColor,
             size: 40,
           ),
         );
@@ -175,7 +177,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
           ),
           markers: mapMarkers.keys.toList(),
           polygonOptions: PolygonOptions(
-            borderColor: Colors.blueGrey[800],
+            borderColor: Theme.of(context).primaryColor,
             color: Colors.blueGrey[300],
             borderStrokeWidth: 3,
           ),
@@ -188,7 +190,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                   side: BorderSide(
-                    color: Colors.blueGrey[800],
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
                 color: Colors.white,
@@ -196,7 +198,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
                   trailing: IconButton(
                     icon: Icon(
                       Icons.open_in_browser_rounded,
-                      color: Colors.blueGrey[800],
+                      color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () async {
                       var stop = mapMarkers[marker];
@@ -213,14 +215,14 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
                   title: Text(
                     '${mapMarkers[marker]['stop_name']}',
                     style: TextStyle(
-                      color: Color(0xff699b2c),
+                      color: Theme.of(context).textTheme.headline2.color,
                       fontSize: 14,
                     ),
                   ),
                   subtitle: Text(
                     '${mapMarkers[marker]['stop_code']}',
                     style: TextStyle(
-                      color: Colors.blueGrey[800],
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -230,7 +232,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
           builder: (context, markers) => FloatingActionButton(
             heroTag: 'service_hero_tag_${markers.length.toString()}',
             onPressed: null,
-            backgroundColor: Colors.blueGrey[800],
+            backgroundColor: Theme.of(context).primaryColor,
             child: Text(
               markers.length.toString(),
             ),

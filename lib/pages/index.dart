@@ -303,19 +303,21 @@ class _IndexPageState extends State<IndexPage> {
                           : showRouteData
                               ? 'Search route number...'
                               : 'Search stop...',
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          _clearSearch();
-                          setState(() {
-                            showRouteData
-                                ? newRoutes = routes
-                                : newStops = stops;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.clear_rounded,
-                        ),
-                      ),
+                      suffixIcon: _textController.text.isEmpty
+                          ? null
+                          : IconButton(
+                              onPressed: () {
+                                _clearSearch();
+                                setState(() {
+                                  showRouteData
+                                      ? newRoutes = routes
+                                      : newStops = stops;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.clear_rounded,
+                              ),
+                            ),
                     ),
                     onChanged: showRouteData ? onRouteChanged : onStopChanged,
                   ),
@@ -335,8 +337,12 @@ class _IndexPageState extends State<IndexPage> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 primary: showFavourites
-                                    ? Theme.of(context).buttonColor
-                                    : Colors.blueGrey[500],
+                                    ? Theme.of(context)
+                                        .toggleButtonsTheme
+                                        .selectedColor
+                                    : Theme.of(context)
+                                        .toggleButtonsTheme
+                                        .color,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -362,8 +368,10 @@ class _IndexPageState extends State<IndexPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           primary: showStopData
-                              ? Theme.of(context).buttonColor
-                              : Colors.blueGrey[500],
+                              ? Theme.of(context)
+                                  .toggleButtonsTheme
+                                  .selectedColor
+                              : Theme.of(context).toggleButtonsTheme.color,
                         ),
                         onPressed: () {
                           fetchStopList();
@@ -386,8 +394,10 @@ class _IndexPageState extends State<IndexPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           primary: showRouteData
-                              ? Theme.of(context).buttonColor
-                              : Colors.blueGrey[500],
+                              ? Theme.of(context)
+                                  .toggleButtonsTheme
+                                  .selectedColor
+                              : Theme.of(context).toggleButtonsTheme.color,
                         ),
                         onPressed: () {
                           fetchRouteList();
@@ -440,10 +450,6 @@ class _IndexPageState extends State<IndexPage> {
                                             ),
                                           );
                                         },
-                                        trailing: Icon(
-                                          Icons.alt_route_rounded,
-                                          color: Theme.of(context).buttonColor,
-                                        ),
                                         leading: Container(
                                           width: 40,
                                           height: 40,
@@ -464,8 +470,9 @@ class _IndexPageState extends State<IndexPage> {
                                               textAlign: TextAlign.center,
                                               // set some style to text
                                               style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.white),
+                                                fontSize: 15,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -509,7 +516,9 @@ class _IndexPageState extends State<IndexPage> {
                                         },
                                         icon: Icon(
                                           Icons.edit,
-                                          color: Color(0xff699b2c),
+                                          color: Theme.of(context)
+                                              .toggleButtonsTheme
+                                              .selectedColor,
                                         ),
                                       ),
                                       leadingIcon: IconButton(
@@ -565,7 +574,9 @@ class _IndexPageState extends State<IndexPage> {
                                       subtitle: stop['stop_id'].toString(),
                                       leadingIcon: Icon(
                                         Icons.directions_bus_rounded,
-                                        color: Color(0xff699b2c),
+                                        color: Theme.of(context)
+                                            .toggleButtonsTheme
+                                            .selectedColor,
                                         size: 30,
                                       ),
                                       trailingIcon: IconButton(

@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 
 import '../../constants/config.dart';
-import '../../helpers/extensions.dart';
 import '../../helpers/requests.dart';
 import '../../helpers/utils.dart';
 import '../maps/service_map.dart';
@@ -158,7 +157,6 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                         service['status'] != null && service['status'] != '';
                     var isCancelled =
                         hasStatus && service['status'] == 'cancelled';
-                    var isOnTime = hasStatus && service['status'] == 'ontime';
                     var isExpected = service['departure']['expected'] == null ||
                         service['departure']['expected'] == '';
 

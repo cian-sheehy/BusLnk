@@ -8,7 +8,7 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) => AppBar(
-        backgroundColor: Colors.blueGrey[800],
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text(
           'BusLnk',
         ),

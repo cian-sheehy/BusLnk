@@ -149,7 +149,7 @@ class RouteWidgetState extends State<RouteWidget>
                             "${stop["stop_name"]}\n${stop["stop_id"]}",
                             textAlign: TextAlign.left,
                             style: TextStyle(
-                              color: Colors.blueGrey[800],
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
@@ -195,7 +195,7 @@ class RouteWidgetState extends State<RouteWidget>
                                   thickness: 3,
                                   indent: 0,
                                   endIndent: 0,
-                                  color: Colors.blueGrey[800],
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             ],

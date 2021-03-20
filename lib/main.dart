@@ -41,17 +41,33 @@ class MainAppState extends State<MainApp> {
         onGenerateRoute: _getRoute,
         theme: ThemeData(
           brightness: Brightness.light,
-          buttonColor: Colors.blueGrey[800],
-          cardColor: Colors.white,
+          primaryColor: Colors.blueGrey[800],
+          accentColor: Colors.blueGrey[400],
+          toggleButtonsTheme: ToggleButtonsThemeData(
+            selectedColor: Colors.teal[600],
+            color: Colors.blueGrey[600],
+          ),
+          buttonColor: Colors.teal[800],
+          cardTheme: CardTheme(
+            shadowColor: Colors.blueGrey[800],
+            elevation: 5,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
+              ),
+            ),
+          ),
           textTheme: TextTheme(
             headline1: TextStyle(
               color: Colors.black,
             ),
             headline2: TextStyle(
-              color: Color(0xff699b2c),
+              color: Colors.lightGreen[800],
             ),
             subtitle1: TextStyle(
-              color: Colors.black,
+              color: Colors.blueGrey[800],
             ),
           ),
           inputDecorationTheme: InputDecorationTheme(
@@ -60,14 +76,38 @@ class MainAppState extends State<MainApp> {
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
+          primaryColor: Colors.blueGrey[800],
           primarySwatch: Colors.orange,
           textTheme: TextTheme(
+            headline1: TextStyle(
+              color: Colors.blueGrey[300],
+            ),
             headline2: TextStyle(
-              color: Color(0xff699b2c),
+              color: Colors.lightGreen[300],
+            ),
+            subtitle1: TextStyle(
+              color: Colors.blueGrey[100],
             ),
           ),
-          cardColor: Colors.blueGrey[800],
-          buttonColor: Colors.orange[300],
+          toggleButtonsTheme: ToggleButtonsThemeData(
+            selectedColor: Colors.teal[400],
+            color: Colors.blueGrey[400],
+          ),
+          switchTheme: SwitchThemeData(
+            splashRadius: 3,
+          ),
+          cardTheme: CardTheme(
+            shadowColor: Colors.purple[100],
+            elevation: 5,
+            color: Colors.blueGrey[800],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
+              ),
+            ),
+          ),
+          buttonColor: Colors.teal[300],
           inputDecorationTheme: InputDecorationTheme(
             fillColor: Colors.blueGrey[800],
           ),
