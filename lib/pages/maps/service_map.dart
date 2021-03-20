@@ -55,6 +55,14 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
     fetchRoute();
   }
 
+  @override
+  void dispose() {
+    polyLines.clear();
+    listMarkers.clear();
+    mapMarkers.clear();
+    super.dispose();
+  }
+
   void fetchRoute() async {
     setState(() {
       isLoading = true;
@@ -107,11 +115,6 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
       // );
       isLoading = false;
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -177,9 +180,8 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
           ),
           markers: mapMarkers.keys.toList(),
           polygonOptions: PolygonOptions(
-            borderColor: Theme.of(context).primaryColor,
-            color: Colors.blueGrey[300],
-            borderStrokeWidth: 3,
+            color: Colors.transparent,
+            borderColor: Colors.transparent,
           ),
           popupOptions: PopupOptions(
             popupController: _popupController,
@@ -187,18 +189,13 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
               width: 200,
               height: 100,
               child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-                color: Colors.white,
+                shape: Theme.of(context).cardTheme.shape,
+                color: Theme.of(context).cardTheme.color,
                 child: ListTile(
                   trailing: IconButton(
                     icon: Icon(
                       Icons.open_in_browser_rounded,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).toggleButtonsTheme.selectedColor,
                     ),
                     onPressed: () async {
                       var stop = mapMarkers[marker];
@@ -222,7 +219,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
                   subtitle: Text(
                     '${mapMarkers[marker]['stop_code']}',
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).textTheme.subtitle1.color,
                     ),
                   ),
                 ),
@@ -235,6 +232,9 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
             backgroundColor: Theme.of(context).primaryColor,
             child: Text(
               markers.length.toString(),
+              style: TextStyle(
+                color: Theme.of(context).textTheme.subtitle1.color,
+              ),
             ),
           ),
         ),
