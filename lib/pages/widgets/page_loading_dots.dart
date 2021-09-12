@@ -118,7 +118,7 @@ class _PageLoadingIndicatorState extends State<PageLoadingIndicator>
   @override
   void dispose() {
     for (var i = 0; i < numberOfDots; i++) {
-      controllers[i].dispose();
+      controllers[i]?.dispose();
     }
     super.dispose();
   }

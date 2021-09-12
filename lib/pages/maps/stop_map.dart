@@ -56,9 +56,9 @@ class StopsMapWidgetState extends State<StopsMapWidget>
 
   @override
   void dispose() {
-    stops.clear();
-    listMarkers.clear();
-    mapMarkers.clear();
+    stops?.clear();
+    listMarkers?.clear();
+    mapMarkers?.clear();
     super.dispose();
   }
 

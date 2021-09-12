@@ -48,11 +48,11 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    routes.clear();
-    services.clear();
-    alerts.clear();
-    serviceAlerts.clear();
-    stopInfo.clear();
+    routes?.clear();
+    services?.clear();
+    alerts?.clear();
+    serviceAlerts?.clear();
+    stopInfo?.clear();
     super.dispose();
   }
 

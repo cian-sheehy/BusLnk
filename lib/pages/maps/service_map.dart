@@ -57,9 +57,9 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
 
   @override
   void dispose() {
-    polyLines.clear();
-    listMarkers.clear();
-    mapMarkers.clear();
+    polyLines?.clear();
+    listMarkers?.clear();
+    mapMarkers?.clear();
     super.dispose();
   }
 

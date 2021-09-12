@@ -55,12 +55,12 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   void dispose() {
-    _textController.dispose();
-    _popUpTextController.dispose();
-    newRoutes.clear();
-    newStops.clear();
-    stops.clear();
-    routes.clear();
+    _textController?.dispose();
+    _popUpTextController?.dispose();
+    newRoutes?.clear();
+    newStops?.clear();
+    stops?.clear();
+    routes?.clear();
     super.dispose();
   }
 
@@ -109,7 +109,7 @@ class _IndexPageState extends State<IndexPage> {
 
   void fetchStopList() async {
     setState(() {
-      _textController.clear();
+      _textController?.clear();
       isLoading = true;
       showRouteData = false;
       showFavourites = false;
@@ -129,7 +129,7 @@ class _IndexPageState extends State<IndexPage> {
 
   void fetchRouteList() async {
     setState(() {
-      _textController.clear();
+      _textController?.clear();
       isLoading = true;
       showRouteData = true;
       showFavourites = false;
@@ -213,7 +213,7 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   void _clearSearch() {
-    _textController.clear();
+    _textController?.clear();
     setState(() {
       newStops = stops;
       newRoutes = routes;
@@ -266,7 +266,7 @@ class _IndexPageState extends State<IndexPage> {
 
   void _clearStorage() {
     setState(() {
-      storage.clear();
+      storage?.clear();
       favouriteList.items =
           storage.getItem('favourites') as List<FavouriteItem> ?? [];
     });
