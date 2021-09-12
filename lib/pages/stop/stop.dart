@@ -118,6 +118,8 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
         key: _scaffoldkey,
         appBar: AppBarWidget(),
         body: RefreshIndicator(
+          backgroundColor: Theme.of(context).cardColor,
+          color: Theme.of(context).toggleButtonsTheme.selectedColor,
           onRefresh: () async {
             fetchStop();
           },

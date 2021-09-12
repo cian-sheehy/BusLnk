@@ -153,6 +153,8 @@ class _IndexPageState extends State<IndexPage> {
         appBar: AppBarWidget(),
         drawer: NavDrawer(),
         body: RefreshIndicator(
+          backgroundColor: Theme.of(context).cardColor,
+          color: Theme.of(context).toggleButtonsTheme.selectedColor,
           onRefresh: () async {
             if (showRouteData) {
               fetchRouteList();

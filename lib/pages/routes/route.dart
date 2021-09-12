@@ -98,6 +98,8 @@ class RouteWidgetState extends State<RouteWidget>
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBarWidget(),
         body: RefreshIndicator(
+          backgroundColor: Theme.of(context).cardColor,
+          color: Theme.of(context).toggleButtonsTheme.selectedColor,
           onRefresh: () async {
             fetchRoute();
           },
