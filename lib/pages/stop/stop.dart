@@ -103,6 +103,15 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                     return true;
                   }
                 }
+                if (a.containsKey('route_id')) {
+                  var ele = stopData['route_ids']
+                      .toList()
+                      .where((id) => a['route_id'] == id);
+                  if (ele.length >= 1 && !alerts.contains(alert)) {
+                    alerts.add(alert);
+                    return true;
+                  }
+                }
                 return false;
               }).toList();
             }
@@ -187,11 +196,13 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                     var currentIndex = index + 1;
                     var text =
                         alerts[index]['header_text']['translation'][0]['text'];
+                    var url = alerts[index]['url']['translation'][0]['text'];
+                    var severityLevel = alerts[index]['severity_level'];
 
                     return Card(
-                      color: myTheme.currentTheme() == ThemeMode.dark
-                          ? Colors.blueGrey[500]
-                          : Colors.orange[300],
+                      color: Utils.calculateBannerAlertColour(
+                        severityLevel,
+                      ),
                       child: Container(
                         padding: const EdgeInsets.all(5),
                         width: MediaQuery.of(context).size.width * 0.95,
@@ -199,9 +210,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                           onPressed: () => {Utils.launchURL(url)},
                           icon: Icon(
                             Icons.error_outline,
-                            color: myTheme.currentTheme() == ThemeMode.dark
-                                ? Colors.orange[400]
-                                : Colors.blueGrey[800],
+                            color: Colors.white,
                           ),
                           label: Flexible(
                             child: Text(
@@ -210,9 +219,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 11,
-                                color: myTheme.currentTheme() == ThemeMode.dark
-                                    ? Colors.orange[400]
-                                    : Colors.blueGrey[800],
+                                color: Colors.white,
                               ),
                             ),
                           ),

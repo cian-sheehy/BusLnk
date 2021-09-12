@@ -123,4 +123,17 @@ class Utils {
         return Colors.white;
     }
   }
+
+  static Color calculateBannerAlertColour(String warning) {
+    switch (warning) {
+      case 'INFO':
+        return Colors.blueGrey[400];
+      case 'WARNING':
+        return Colors.orange[400];
+      case 'SEVERE':
+        return Colors.red[400];
+      default:
+        return Colors.blueGrey[400];
+    }
+  }
 }
