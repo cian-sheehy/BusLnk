@@ -21,15 +21,12 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   final GlobalKey _scaffoldkey = GlobalKey();
+  int _currentIndex = 0;
   List stops = [];
   List newStops = [];
   List routes = [];
   List newRoutes = [];
-  bool isLoading = false;
   bool initialized = false;
-  bool showRouteData = false;
-  bool showStopData = false;
-  bool showFavourites = false;
   bool _validate = false;
 
   FavouriteItem _editingFavItem;
@@ -62,6 +59,18 @@ class _IndexPageState extends State<IndexPage> {
     stops?.clear();
     routes?.clear();
     super.dispose();
+  }
+
+  void onBottomNavTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      if (_currentIndex == 1 && (stops.isEmpty)) {
+        fetchStopList();
+      }
+      if (_currentIndex == 2 && (routes.isEmpty)) {
+        fetchRouteList();
+      }
+    });
   }
 
   Widget _buildPopupDialog(BuildContext context) => AlertDialog(
@@ -109,11 +118,8 @@ class _IndexPageState extends State<IndexPage> {
 
   void fetchStopList() async {
     setState(() {
+      stops?.clear();
       _textController?.clear();
-      isLoading = true;
-      showRouteData = false;
-      showFavourites = false;
-      showStopData = true;
     });
 
     var stopData = await getRequestCache(
@@ -123,17 +129,13 @@ class _IndexPageState extends State<IndexPage> {
     setState(() {
       stops = stopData as List<dynamic>;
       newStops = List.from(stops);
-      isLoading = false;
     });
   }
 
   void fetchRouteList() async {
     setState(() {
+      routes?.clear();
       _textController?.clear();
-      isLoading = true;
-      showRouteData = true;
-      showFavourites = false;
-      showStopData = false;
     });
 
     var routeData = await getRequestCache(
@@ -143,45 +145,77 @@ class _IndexPageState extends State<IndexPage> {
     setState(() {
       routes = routeData as List<dynamic>;
       newRoutes = List.from(routes);
-      isLoading = false;
     });
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        key: _scaffoldkey,
-        appBar: AppBarWidget(),
-        drawer: NavDrawer(),
-        body: RefreshIndicator(
-          backgroundColor: Theme.of(context).cardColor,
-          color: Theme.of(context).toggleButtonsTheme.selectedColor,
-          onRefresh: () async {
-            if (showRouteData) {
-              fetchRouteList();
-            } else if (showStopData) {
-              fetchStopList();
-            }
-          },
-          child: getBody(),
-        ),
-        floatingActionButton: showFavourites && !isLoading
-            ? FloatingActionButton(
-                heroTag: 'favourite_hero_tag',
-                onPressed: () {
-                  // Add your onPressed code here!
-                  setState(() {
-                    _clearStorage();
-                    showFavourites = false;
-                    fetchStopList();
-                  });
-                },
-                backgroundColor: Theme.of(context).buttonColor,
-                child: Icon(
-                  Icons.delete,
-                ),
-              )
-            : null,
-      );
+  Widget build(BuildContext context) {
+    var _currentPage = [getFavouriteBody(), getStopBody(), getRouteBody()];
+
+    return Scaffold(
+      key: _scaffoldkey,
+      appBar: AppBarWidget(),
+      drawer: NavDrawer(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: onBottomNavTapped,
+        selectedFontSize: 15,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              _currentIndex == 0 ? Icons.star : Icons.star_outline,
+            ),
+            label: favouriteList.items.isEmpty
+                ? 'Favourites'
+                : 'Favourites (${favouriteList.items.length})',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              _currentIndex == 1
+                  ? Icons.directions_bus
+                  : Icons.directions_bus_outlined,
+            ),
+            label: 'Stops',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              _currentIndex == 2 ? Icons.alt_route : Icons.alt_route_outlined,
+            ),
+            label: 'Routes',
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        backgroundColor: Theme.of(context).cardColor,
+        color: Theme.of(context).toggleButtonsTheme.selectedColor,
+        onRefresh: () async {
+          if (_currentIndex == 1) {
+            fetchStopList();
+          }
+          if (_currentIndex == 2) {
+            fetchRouteList();
+          }
+        },
+        child: _currentPage[_currentIndex],
+      ),
+      floatingActionButton: _currentIndex == 0
+          ? FloatingActionButton(
+              heroTag: 'favourite_hero_tag',
+              onPressed: () {
+                // Add your onPressed code here!
+                setState(() {
+                  _clearStorage();
+                  fetchStopList();
+                });
+              },
+              backgroundColor: Theme.of(context).buttonColor,
+              child: Icon(
+                Icons.delete,
+              ),
+            )
+          : null,
+    );
+  }
 
   void _addItem(String stopName, String stopNum) {
     setState(() {
@@ -237,18 +271,13 @@ class _IndexPageState extends State<IndexPage> {
               ),
             );
             initialized = true;
-            if (favouriteList.items.isNotEmpty) {
-              showFavourites = true;
-              showRouteData = false;
-              showStopData = false;
-            }
           });
         }
       }
     });
   }
 
-  void _remoteItem(String stopName, String stopNum) {
+  void _removeItem(String stopName, String stopNum) {
     setState(() {
       favouriteList.items.removeWhere(
         (file) => file.stopNum == stopNum && file.stopName == stopName,
@@ -285,10 +314,10 @@ class _IndexPageState extends State<IndexPage> {
     });
   }
 
-  Widget getBody() => FutureBuilder(
+  Widget getFavouriteBody() => FutureBuilder(
         future: storage.ready,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null || stops.contains(null) || stops.isEmpty) {
+          if (snapshot.data == null) {
             return Center(
               child: PageLoadingIndicator(),
             );
@@ -309,359 +338,375 @@ class _IndexPageState extends State<IndexPage> {
                     color: Theme.of(context).inputDecorationTheme.fillColor,
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: TextField(
-                    enabled: !isLoading,
-                    keyboardType: TextInputType.text,
-                    controller: _textController,
-                    onSubmitted: (value) async {
-                      if (newStops.isNotEmpty) {
+                  child: Focus(
+                    onFocusChange: (hasFocus) {
+                      if (hasFocus) {
+                        setState(() {
+                          _currentIndex = 1;
+                        });
+                      }
+                    },
+                    child: TextField(
+                      enabled: stops.isNotEmpty,
+                      keyboardType: TextInputType.text,
+                      controller: _textController,
+                      onSubmitted: (value) async {
+                        if (newStops.isNotEmpty) {
+                          await Navigator.pushNamed(
+                            _scaffoldkey.currentContext,
+                            '/stop',
+                            arguments: StopArguments(
+                              newStops[0]['stop_name'].toString(),
+                              newStops[0]['stop_id'].toString(),
+                            ),
+                          );
+                        }
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Search stop...',
+                      ),
+                      onChanged: onStopChanged,
+                    ),
+                  ),
+                ),
+              ),
+              Flexible(
+                child: ReorderableListView(
+                  onReorder: reorderData,
+                  shrinkWrap: true,
+                  // key: UniqueKey(),
+                  padding: EdgeInsets.all(12.0),
+                  children: favouriteList.items.map((favourite) {
+                    var stopExistsInFavourites = favouriteList.items.any(
+                      (file) => file.stopNum == favourite.stopNum,
+                    );
+                    return CardWidget(
+                      key: ValueKey(favourite),
+                      title: favourite.stopName,
+                      subtitle: favourite.stopNum,
+                      trailingIcon: IconButton(
+                        onPressed: () {
+                          _popUpTextController = TextEditingController(
+                            text: favourite.stopName,
+                          );
+                          _editingFavItem = favourite;
+                          showDialog(
+                            context: context,
+                            builder: _buildPopupDialog,
+                          );
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: Theme.of(context)
+                              .toggleButtonsTheme
+                              .selectedColor,
+                        ),
+                      ),
+                      leadingIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            if (stopExistsInFavourites) {
+                              _removeItem(
+                                favourite.stopName.toString(),
+                                favourite.stopNum.toString(),
+                              );
+                              if (favouriteList.items.isEmpty) {
+                                fetchStopList();
+                              }
+                            } else {
+                              _addItem(
+                                favourite.stopName,
+                                favourite.stopNum,
+                              );
+                            }
+                          });
+                          _clearSearch();
+                        },
+                        icon: Icon(
+                          stopExistsInFavourites
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: Theme.of(context).buttonColor,
+                        ),
+                      ),
+                      onTapCallback: () async {
                         await Navigator.pushNamed(
                           _scaffoldkey.currentContext,
                           '/stop',
                           arguments: StopArguments(
-                            newStops[0]['stop_name'].toString(),
-                            newStops[0]['stop_id'].toString(),
+                            favourite.stopName,
+                            favourite.stopNum,
                           ),
                         );
-                      }
-                    },
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: isLoading
-                          ? 'Loading..'
-                          : showRouteData
-                              ? 'Search route number...'
-                              : 'Search stop...',
-                      suffixIcon: _textController.text.isEmpty
-                          ? null
-                          : IconButton(
-                              onPressed: () {
-                                _clearSearch();
-                                setState(() {
-                                  showRouteData
-                                      ? newRoutes = routes
-                                      : newStops = stops;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.clear_rounded,
-                              ),
-                            ),
-                    ),
-                    onChanged: showRouteData ? onRouteChanged : onStopChanged,
-                  ),
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
-              Container(
-                height: 50,
-                child: ButtonBar(
-                  alignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    favouriteList.items.isNotEmpty
-                        ? ButtonTheme(
-                            minWidth: 80,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                primary: showFavourites
-                                    ? Theme.of(context)
-                                        .toggleButtonsTheme
-                                        .selectedColor
-                                    : Theme.of(context)
-                                        .toggleButtonsTheme
-                                        .color,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  showFavourites = true;
-                                  showRouteData = false;
-                                  showStopData = false;
-                                });
-                              },
-                              child: Text(
-                                'Favourites (${favouriteList.items.length})',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          )
-                        : null,
-                    ButtonTheme(
-                      minWidth: 80,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          primary: showStopData
-                              ? Theme.of(context)
-                                  .toggleButtonsTheme
-                                  .selectedColor
-                              : Theme.of(context).toggleButtonsTheme.color,
-                        ),
-                        onPressed: () {
-                          fetchStopList();
-                        },
-                        child: Text(
-                          _textController.text.isNotEmpty && showStopData
-                              ? 'Stops (${newStops.length})'
-                              : 'Stops',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                    ButtonTheme(
-                      minWidth: 80,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          primary: showRouteData
-                              ? Theme.of(context)
-                                  .toggleButtonsTheme
-                                  .selectedColor
-                              : Theme.of(context).toggleButtonsTheme.color,
-                        ),
-                        onPressed: () {
-                          fetchRouteList();
-                        },
-                        child: Text(
-                          _textController.text.isNotEmpty && showRouteData
-                              ? 'Routes (${newStops.length})'
-                              : 'Routes',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              isLoading
-                  ? PageLoadingIndicator()
-                  : Flexible(
-                      child: showRouteData
-                          ? ListView(
-                              shrinkWrap: true,
-                              key: UniqueKey(),
-                              padding: EdgeInsets.all(12.0),
-                              children: newRoutes
-                                  .map((route) => Card(
-                                        color: Theme.of(context).cardColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(25),
-                                            bottomRight: Radius.circular(25),
-                                          ),
-                                          side: BorderSide(
-                                            color: Utils.hexToColor(
-                                              route['route_color'].toString(),
-                                            ),
-                                            width: 2,
-                                          ),
-                                        ),
-                                        child: ListTile(
-                                          onTap: () async {
-                                            await Navigator.pushNamed(
-                                              _scaffoldkey.currentContext,
-                                              '/servicemap',
-                                              arguments: ServiceMapArguments(
-                                                route['route_id'].toString(),
-                                                null,
-                                              ),
-                                            );
-                                          },
-                                          leading: Container(
-                                            width: 40,
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                              color: Utils.hexToColor(
-                                                route['route_color'].toString(),
-                                              ),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            margin: EdgeInsets.only(
-                                              right: 10,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                // Read the name field value and set it in the Text widget
-                                                route['route_short_name']
-                                                    .toString(),
-                                                textAlign: TextAlign.center,
-                                                // set some style to text
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          title: RichText(
-                                            text: TextSpan(
-                                              text: route['route_long_name']
-                                                  .toString(),
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .headline1
-                                                    .color,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ))
-                                  .toList(),
-                            )
-                          : showFavourites
-                              ? ReorderableListView(
-                                  onReorder: reorderData,
-                                  shrinkWrap: true,
-                                  // key: UniqueKey(),
-                                  padding: EdgeInsets.all(12.0),
-                                  children:
-                                      favouriteList.items.map((favourite) {
-                                    var stopExistsInFavourites =
-                                        favouriteList.items.any(
-                                      (file) =>
-                                          file.stopNum == favourite.stopNum,
-                                    );
-                                    return CardWidget(
-                                      key: ValueKey(favourite),
-                                      title: favourite.stopName,
-                                      subtitle: favourite.stopNum,
-                                      trailingIcon: IconButton(
-                                        onPressed: () {
-                                          _popUpTextController =
-                                              TextEditingController(
-                                            text: favourite.stopName,
-                                          );
-                                          _editingFavItem = favourite;
-                                          showDialog(
-                                            context: context,
-                                            builder: _buildPopupDialog,
-                                          );
-                                        },
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: Theme.of(context)
-                                              .toggleButtonsTheme
-                                              .selectedColor,
-                                        ),
-                                      ),
-                                      leadingIcon: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (stopExistsInFavourites) {
-                                              _remoteItem(
-                                                favourite.stopName.toString(),
-                                                favourite.stopNum.toString(),
-                                              );
-                                              if (favouriteList.items.isEmpty) {
-                                                fetchStopList();
-                                              }
-                                            } else {
-                                              _addItem(
-                                                favourite.stopName,
-                                                favourite.stopNum,
-                                              );
-                                            }
-                                          });
-                                          _clearSearch();
-                                        },
-                                        icon: Icon(
-                                          stopExistsInFavourites
-                                              ? Icons.star
-                                              : Icons.star_border,
-                                          color: Theme.of(context).buttonColor,
-                                        ),
-                                      ),
-                                      onTapCallback: () async {
-                                        await Navigator.pushNamed(
-                                          _scaffoldkey.currentContext,
-                                          '/stop',
-                                          arguments: StopArguments(
-                                            favourite.stopName,
-                                            favourite.stopNum,
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  }).toList(),
-                                )
-                              : ListView(
-                                  shrinkWrap: true,
-                                  key: UniqueKey(),
-                                  padding: EdgeInsets.all(12.0),
-                                  children: newStops.map((stop) {
-                                    var stopExistsInFavourites =
-                                        favouriteList.items.any(
-                                      (file) =>
-                                          file.stopNum ==
-                                          stop['stop_id'].toString(),
-                                    );
-                                    return CardWidget(
-                                      title: stop['stop_name'].toString(),
-                                      subtitle: stop['stop_id'].toString(),
-                                      leadingIcon: Icon(
-                                        Icons.directions_bus_rounded,
-                                        color: Theme.of(context)
-                                            .toggleButtonsTheme
-                                            .selectedColor,
-                                        size: 30,
-                                      ),
-                                      trailingIcon: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (stopExistsInFavourites) {
-                                              _remoteItem(
-                                                stop['stop_name'].toString(),
-                                                stop['stop_id'].toString(),
-                                              );
-                                            } else {
-                                              _addItem(
-                                                stop['stop_name'].toString(),
-                                                stop['stop_id'].toString(),
-                                              );
-                                            }
-                                            _clearSearch();
-                                          });
-                                        },
-                                        icon: Icon(
-                                          stopExistsInFavourites
-                                              ? Icons.star
-                                              : Icons.star_border,
-                                          color: Theme.of(context).buttonColor,
-                                        ),
-                                      ),
-                                      onTapCallback: () async {
-                                        await Navigator.pushNamed(
-                                          _scaffoldkey.currentContext,
-                                          '/stop',
-                                          arguments: StopArguments(
-                                            stop['stop_name'].toString(),
-                                            stop['stop_id'].toString(),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  }).toList(),
-                                )),
             ],
           );
         },
       );
 
+  Widget getStopBody() {
+    var isLoading = stops.isEmpty;
+    if (isLoading) {
+      return Center(
+        child: PageLoadingIndicator(),
+      );
+    }
+
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+          ),
+          child: Container(
+            padding: EdgeInsets.only(left: 15, top: 5),
+            decoration: BoxDecoration(
+              color: Theme.of(context).inputDecorationTheme.fillColor,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: TextField(
+              enabled: !isLoading,
+              autofocus: true,
+              keyboardType: TextInputType.text,
+              controller: _textController,
+              onSubmitted: (value) async {
+                if (newStops.isNotEmpty) {
+                  await Navigator.pushNamed(
+                    _scaffoldkey.currentContext,
+                    '/stop',
+                    arguments: StopArguments(
+                      newStops[0]['stop_name'].toString(),
+                      newStops[0]['stop_id'].toString(),
+                    ),
+                  );
+                }
+              },
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: isLoading ? 'Loading..' : 'Search stop...',
+                suffixIcon: _textController.text.isEmpty
+                    ? null
+                    : IconButton(
+                        onPressed: () {
+                          _clearSearch();
+                          setState(() {
+                            newStops = stops;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.clear_rounded,
+                        ),
+                      ),
+              ),
+              onChanged: onStopChanged,
+            ),
+          ),
+        ),
+        isLoading
+            ? PageLoadingIndicator()
+            : Flexible(
+                child: ListView(
+                shrinkWrap: true,
+                key: UniqueKey(),
+                padding: EdgeInsets.all(12.0),
+                children: newStops.map((stop) {
+                  var stopExistsInFavourites = favouriteList.items.any(
+                    (file) => file.stopNum == stop['stop_id'].toString(),
+                  );
+                  return CardWidget(
+                    title: stop['stop_name'].toString(),
+                    subtitle: stop['stop_id'].toString(),
+                    leadingIcon: Icon(
+                      Icons.directions_bus_rounded,
+                      color: Theme.of(context).toggleButtonsTheme.selectedColor,
+                      size: 30,
+                    ),
+                    trailingIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (stopExistsInFavourites) {
+                            _removeItem(
+                              stop['stop_name'].toString(),
+                              stop['stop_id'].toString(),
+                            );
+                          } else {
+                            _addItem(
+                              stop['stop_name'].toString(),
+                              stop['stop_id'].toString(),
+                            );
+                          }
+                          _clearSearch();
+                        });
+                      },
+                      icon: Icon(
+                        stopExistsInFavourites ? Icons.star : Icons.star_border,
+                        color: Theme.of(context).buttonColor,
+                      ),
+                    ),
+                    onTapCallback: () async {
+                      await Navigator.pushNamed(
+                        _scaffoldkey.currentContext,
+                        '/stop',
+                        arguments: StopArguments(
+                          stop['stop_name'].toString(),
+                          stop['stop_id'].toString(),
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
+              )),
+      ],
+    );
+  }
+
+  Widget getRouteBody() {
+    var isLoading = routes.isEmpty;
+    if (isLoading) {
+      return Center(
+        child: PageLoadingIndicator(),
+      );
+    }
+
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+          ),
+          child: Container(
+            padding: EdgeInsets.only(left: 15, top: 5),
+            decoration: BoxDecoration(
+              color: Theme.of(context).inputDecorationTheme.fillColor,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: TextField(
+              enabled: !isLoading,
+              autofocus: true,
+              keyboardType: TextInputType.text,
+              controller: _textController,
+              onSubmitted: (value) async {
+                if (newStops.isNotEmpty) {
+                  await Navigator.pushNamed(
+                    _scaffoldkey.currentContext,
+                    '/stop',
+                    arguments: StopArguments(
+                      newStops[0]['stop_name'].toString(),
+                      newStops[0]['stop_id'].toString(),
+                    ),
+                  );
+                }
+              },
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: isLoading ? 'Loading..' : 'Search route number...',
+                suffixIcon: _textController.text.isEmpty
+                    ? null
+                    : IconButton(
+                        onPressed: () {
+                          _clearSearch();
+                          setState(() {
+                            newRoutes = routes;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.clear_rounded,
+                        ),
+                      ),
+              ),
+              onChanged: onRouteChanged,
+            ),
+          ),
+        ),
+        isLoading
+            ? PageLoadingIndicator()
+            : Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  key: UniqueKey(),
+                  padding: EdgeInsets.all(12.0),
+                  children: newRoutes
+                      .map((route) => Card(
+                            color: Theme.of(context).cardColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(25),
+                                bottomRight: Radius.circular(25),
+                              ),
+                              side: BorderSide(
+                                color: Utils.hexToColor(
+                                  route['route_color'].toString(),
+                                ),
+                                width: 2,
+                              ),
+                            ),
+                            child: ListTile(
+                              onTap: () async {
+                                await Navigator.pushNamed(
+                                  _scaffoldkey.currentContext,
+                                  '/servicemap',
+                                  arguments: ServiceMapArguments(
+                                    route['route_id'].toString(),
+                                    null,
+                                  ),
+                                );
+                              },
+                              leading: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Utils.hexToColor(
+                                    route['route_color'].toString(),
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                margin: EdgeInsets.only(
+                                  right: 10,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    // Read the name field value and set it in the Text widget
+                                    route['route_short_name'].toString(),
+                                    textAlign: TextAlign.center,
+                                    // set some style to text
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              title: RichText(
+                                text: TextSpan(
+                                  text: route['route_long_name'].toString(),
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline1
+                                        .color,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+      ],
+    );
+  }
+
   void onStopChanged(String searchText) {
     setState(() {
-      showFavourites = false;
       final fuse = Fuzzy(
         stops,
         options: FuzzyOptions(
