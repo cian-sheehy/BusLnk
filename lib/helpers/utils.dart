@@ -25,8 +25,11 @@ class Utils {
   static String getCurrentTime() =>
       "${DateTime.now().toLocal().hour.toString().padLeft(2, '0')}:${DateTime.now().toLocal().minute.toString().padLeft(2, '0')}";
 
-  static void launchURL(String stopNumber) async {
-    var url = 'https://www.metlink.org.nz/stop/$stopNumber';
+  static void launchStopURL(String stopNumber) async {
+    launchURL('https://www.metlink.org.nz/stop/$stopNumber');
+  }
+
+  static void launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {

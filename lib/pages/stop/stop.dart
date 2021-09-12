@@ -196,7 +196,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                         padding: const EdgeInsets.all(5),
                         width: MediaQuery.of(context).size.width * 0.95,
                         child: TextButton.icon(
-                          onPressed: null,
+                          onPressed: () => {Utils.launchURL(url)},
                           icon: Icon(
                             Icons.error_outline,
                             color: myTheme.currentTheme() == ThemeMode.dark

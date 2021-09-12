@@ -79,7 +79,7 @@ class NoStopInformationWidgetState extends State<NoStopInformationWidget>
                     size: 40,
                   ),
                   onPressed: () {
-                    Utils.launchURL(stopNumber);
+                    Utils.launchStopURL(stopNumber);
                   },
                 ),
               ),
