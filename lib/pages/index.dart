@@ -377,8 +377,7 @@ class _IndexPageState extends State<IndexPage> {
                 child: ReorderableListView(
                   onReorder: reorderData,
                   shrinkWrap: true,
-                  // key: UniqueKey(),
-                  padding: EdgeInsets.all(12.0),
+                  padding: EdgeInsets.all(15),
                   children: favouriteList.items.map((favourite) {
                     var stopExistsInFavourites = favouriteList.items.any(
                       (file) => file.stopNum == favourite.stopNum,
@@ -517,7 +516,7 @@ class _IndexPageState extends State<IndexPage> {
                 child: ListView(
                 shrinkWrap: true,
                 key: UniqueKey(),
-                padding: EdgeInsets.all(12.0),
+                padding: EdgeInsets.all(15),
                 children: newStops.map((stop) {
                   var stopExistsInFavourites = favouriteList.items.any(
                     (file) => file.stopNum == stop['stop_id'].toString(),
@@ -635,10 +634,10 @@ class _IndexPageState extends State<IndexPage> {
                 child: ListView(
                   shrinkWrap: true,
                   key: UniqueKey(),
-                  padding: EdgeInsets.all(12.0),
+                  padding: EdgeInsets.all(15),
                   children: newRoutes
                       .map((route) => Card(
-                            color: Theme.of(context).cardColor,
+                            // color: Theme.of(context).cardColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(25),
@@ -693,7 +692,7 @@ class _IndexPageState extends State<IndexPage> {
                                   style: TextStyle(
                                     color: Theme.of(context)
                                         .textTheme
-                                        .headline1
+                                        .subtitle1
                                         .color,
                                   ),
                                 ),
