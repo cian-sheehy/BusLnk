@@ -277,16 +277,18 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                       isDue = departureDuration.inSeconds < 120;
                     } else {
                       _time = DateTime.parse(
-                              service['departure']['aimed'].toString())
-                          .toLocal();
+                        service['departure']['aimed'].toString(),
+                      ).toLocal();
                     }
 
                     var isWheelChairAccessble =
                         service['wheelchair_accessible'] as bool;
 
                     var _formattedDate = DateFormat('EEE, MMM d').format(
-                        DateTime.parse(
-                            service['departure']['aimed'].toString()));
+                      DateTime.parse(
+                        service['departure']['aimed'].toString(),
+                      ).toLocal(),
+                    );
 
                     dynamic route = Utils.findRoute(
                       routes,
