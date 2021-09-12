@@ -68,7 +68,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
       isLoading = true;
     });
     var routeData = await getRequestCache(
-      '$openApiBaseUrl/stops?route_id=${widget.arguments.routeID}',
+      '$openApiGtsBaseUrl/stops?route_id=${widget.arguments.routeID}',
     );
 
     setState(() {

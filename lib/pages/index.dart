@@ -117,7 +117,7 @@ class _IndexPageState extends State<IndexPage> {
     });
 
     var stopData = await getRequestCache(
-      '$openApiBaseUrl/stops',
+      '$openApiGtsBaseUrl/stops',
     );
 
     setState(() {
@@ -137,7 +137,7 @@ class _IndexPageState extends State<IndexPage> {
     });
 
     var routeData = await getRequestCache(
-      '$openApiBaseUrl/routes',
+      '$openApiGtsBaseUrl/routes',
     );
 
     setState(() {

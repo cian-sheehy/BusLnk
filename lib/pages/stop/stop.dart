@@ -75,7 +75,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
     );
     // Get route information
     var routeData = await getRequest(
-      '$openApiBaseUrl/routes',
+      '$openApiGtsBaseUrl/routes',
     );
     // Get route information
     var serviceAlertData = await getRequest(
@@ -83,7 +83,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
     );
     // Get depatures
     var depaturesData = await getRequest(
-      '$backendApiBaseUrl/stopdepartures/${widget.arguments.stopNumber}',
+      '$openApiBaseUrl/stop-predictions?stop_id=${widget.arguments.stopNumber}',
     );
 
     if (mounted) {

@@ -77,7 +77,7 @@ class RouteWidgetState extends State<RouteWidget>
       colourCode = widget.arguments.colour;
     });
     var routeData = await getRequest(
-      '$openApiBaseUrl/stops?route_id=$routeID',
+      '$openApiGtsBaseUrl/stops?route_id=$routeID',
     );
     setState(() {
       route = routeData as List<dynamic>;

@@ -68,7 +68,7 @@ class StopsMapWidgetState extends State<StopsMapWidget>
     });
 
     var stopData = await getRequestCache(
-      '$openApiBaseUrl/stops',
+      '$openApiGtsBaseUrl/stops',
     );
     setState(() {
       stops = stopData;
