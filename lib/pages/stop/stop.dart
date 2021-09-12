@@ -68,6 +68,89 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
     }
   }
 
+  Widget _buildPopupDialog(BuildContext context) => AlertDialog(
+        contentPadding: EdgeInsets.all(5),
+        scrollable: true,
+        title: TextButton.icon(
+          onPressed: null,
+          icon: Icon(
+            Icons.bus_alert,
+            color: Theme.of(context).textTheme.headline2.color,
+          ),
+          label: Text(
+            'Service alert information',
+            style: TextStyle(
+              fontSize: 20,
+              color: Theme.of(context).textTheme.headline2.color,
+            ),
+          ),
+        ),
+        backgroundColor: Theme.of(context).cardColor,
+        content: Container(
+          height: MediaQuery.of(context).size.height / 2,
+          width: MediaQuery.of(context).size.width,
+          child: ListView.builder(
+            itemCount: alerts.length,
+            itemBuilder: (BuildContext context, int index) {
+              var text = alerts[index]['header_text']['translation'][0]['text'];
+              var doesUrlExist = alerts[index].containsKey('url') as bool;
+              var url = doesUrlExist ??
+                  alerts[index]['url']['translation'][0]['text'];
+              var severityLevel = alerts[index]['severity_level'];
+              return Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(
+                  top: 6,
+                  bottom: 6,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: TextButton.icon(
+                    onPressed: doesUrlExist
+                        ? () => {
+                              Utils.launchURL(
+                                url,
+                              )
+                            }
+                        : null,
+                    icon: Icon(
+                      Icons.error_outline,
+                      color: Utils.calculateBannerAlertColour(severityLevel),
+                    ),
+                    label: Flexible(
+                      child: Text(
+                        text,
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Theme.of(context).textTheme.headline2.color,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Close',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.headline2.color,
+              ),
+            ),
+          ),
+        ],
+      );
+
   void fetchStop() async {
     if (mounted) {
       setState(() {
@@ -202,55 +285,41 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
         alerts.isEmpty
             ? Container()
             : Container(
-                height: 70,
+                height: 60,
                 width: MediaQuery.of(context).size.width - 10,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: alerts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var count = alerts.length;
-                    var currentIndex = index + 1;
-                    var text =
-                        alerts[index]['header_text']['translation'][0]['text'];
-                    var doesUrlExist = alerts[index].containsKey('url') as bool;
-                    var url = doesUrlExist ??
-                        alerts[index]['url']['translation'][0]['text'];
-                    var severityLevel = alerts[index]['severity_level'];
-
-                    return Card(
-                      color: Utils.calculateBannerAlertColour(
-                        severityLevel,
+                child: Card(
+                  color: Utils.calculateBannerAlertColour(
+                    alerts[0]['severity_level'],
+                  ),
+                  child: ListTile(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: _buildPopupDialog,
+                      );
+                    },
+                    title: Text(
+                      '${alerts.length} alerts affecting bus routes',
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        width: MediaQuery.of(context).size.width * 0.95,
-                        child: TextButton.icon(
-                          onPressed: doesUrlExist
-                              ? () => {
-                                    Utils.launchURL(
-                                      url,
-                                    )
-                                  }
-                              : null,
-                          icon: Icon(
-                            Icons.error_outline,
-                            color: Colors.white,
-                          ),
-                          label: Flexible(
-                            child: Text(
-                              '$text ${'($currentIndex/$count)'}',
-                              maxLines: 4,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
+                    ),
+                    leading: Icon(
+                      Icons.error_outline,
+                      color: Colors.white,
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_right,
                       ),
-                    );
-                  },
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: _buildPopupDialog,
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ),
         isLoading

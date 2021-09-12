@@ -64,7 +64,7 @@ class MainAppState extends State<MainApp> {
               color: Colors.black,
             ),
             headline2: TextStyle(
-              color: Colors.lightGreen[800],
+              color: Colors.black,
             ),
             subtitle1: TextStyle(
               color: Colors.blueGrey[800],
@@ -86,7 +86,7 @@ class MainAppState extends State<MainApp> {
               color: Colors.blueGrey[300],
             ),
             headline2: TextStyle(
-              color: Colors.lightGreen[300],
+              color: Colors.white,
             ),
             subtitle1: TextStyle(
               color: Colors.blueGrey[100],
