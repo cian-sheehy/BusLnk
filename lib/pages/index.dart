@@ -75,7 +75,7 @@ class _IndexPageState extends State<IndexPage> {
               keyboardType: TextInputType.text,
               controller: _popUpTextController,
               decoration: InputDecoration(
-                hintText: 'Enter custon name',
+                hintText: 'Enter custom name',
               ),
             )
           ],
@@ -583,7 +583,7 @@ class _IndexPageState extends State<IndexPage> {
                                           color: Theme.of(context).buttonColor,
                                         ),
                                       ),
-                                      callback: () async {
+                                      onTapCallback: () async {
                                         await Navigator.pushNamed(
                                           _scaffoldkey.currentContext,
                                           '/stop',
@@ -641,7 +641,7 @@ class _IndexPageState extends State<IndexPage> {
                                           color: Theme.of(context).buttonColor,
                                         ),
                                       ),
-                                      callback: () async {
+                                      onTapCallback: () async {
                                         await Navigator.pushNamed(
                                           _scaffoldkey.currentContext,
                                           '/stop',

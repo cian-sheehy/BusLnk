@@ -6,7 +6,7 @@ class CardWidget extends StatefulWidget {
   final Key key;
   final Widget leadingIcon;
   final Widget trailingIcon;
-  final VoidCallback callback;
+  final VoidCallback onTapCallback;
   final VoidCallback longPressCallback;
 
   const CardWidget({
@@ -15,7 +15,7 @@ class CardWidget extends StatefulWidget {
     this.key,
     this.leadingIcon,
     this.trailingIcon,
-    this.callback,
+    this.onTapCallback,
     this.longPressCallback,
   });
 
@@ -26,7 +26,7 @@ class CardWidget extends StatefulWidget {
         key: key,
         leadingIcon: leadingIcon,
         trailingIcon: trailingIcon,
-        callback: callback,
+        onTapCallback: onTapCallback,
         longPressCallback: longPressCallback,
       );
 }
@@ -37,7 +37,7 @@ class CardWidgetState extends State<CardWidget> with TickerProviderStateMixin {
   Key key;
   Widget leadingIcon;
   Widget trailingIcon;
-  VoidCallback callback;
+  VoidCallback onTapCallback;
   VoidCallback longPressCallback;
   CardWidgetState({
     this.title,
@@ -45,7 +45,7 @@ class CardWidgetState extends State<CardWidget> with TickerProviderStateMixin {
     this.key,
     this.leadingIcon,
     this.trailingIcon,
-    this.callback,
+    this.onTapCallback,
     this.longPressCallback,
   });
 
@@ -68,7 +68,7 @@ class CardWidgetState extends State<CardWidget> with TickerProviderStateMixin {
           shape: Theme.of(context).cardTheme.shape,
           child: ListTile(
             onLongPress: longPressCallback,
-            onTap: callback,
+            onTap: onTapCallback,
             contentPadding: const EdgeInsets.only(
               left: 15,
             ),
