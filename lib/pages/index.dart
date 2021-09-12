@@ -331,10 +331,11 @@ class _IndexPageState extends State<IndexPage> {
                 padding: EdgeInsets.only(
                   left: 20,
                   right: 20,
-                  top: 20,
+                  top: 10,
+                  bottom: 10,
                 ),
                 child: Container(
-                  padding: EdgeInsets.only(left: 15, top: 5),
+                  padding: EdgeInsets.only(left: 15),
                   decoration: BoxDecoration(
                     color: Theme.of(context).inputDecorationTheme.fillColor,
                     borderRadius: BorderRadius.circular(15),
@@ -463,10 +464,11 @@ class _IndexPageState extends State<IndexPage> {
           padding: EdgeInsets.only(
             left: 20,
             right: 20,
-            top: 20,
+            top: 10,
+            bottom: 10,
           ),
           child: Container(
-            padding: EdgeInsets.only(left: 15, top: 5),
+            padding: EdgeInsets.only(left: 15),
             decoration: BoxDecoration(
               color: Theme.of(context).inputDecorationTheme.fillColor,
               borderRadius: BorderRadius.circular(15),
@@ -580,10 +582,11 @@ class _IndexPageState extends State<IndexPage> {
           padding: EdgeInsets.only(
             left: 20,
             right: 20,
-            top: 20,
+            top: 10,
+            bottom: 10,
           ),
           child: Container(
-            padding: EdgeInsets.only(left: 15, top: 5),
+            padding: EdgeInsets.only(left: 15),
             decoration: BoxDecoration(
               color: Theme.of(context).inputDecorationTheme.fillColor,
               borderRadius: BorderRadius.circular(15),
