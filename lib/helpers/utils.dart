@@ -129,7 +129,7 @@ class Utils {
       case 'INFO':
         return Colors.blueGrey[300];
       case 'WARNING':
-        return Colors.orange[300];
+        return Colors.amber[600];
       case 'SEVERE':
         return Colors.red[300];
       default:
