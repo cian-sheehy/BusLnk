@@ -287,181 +287,159 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                         bottom: 15,
                       ),
                       decoration: BoxDecoration(
-                        color: isCancelled
-                            ? Colors.red[100]
-                            : Theme.of(context).cardColor,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(25),
                           topRight: Radius.circular(25),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: routeColor,
-                            spreadRadius: 2,
-                          ),
-                        ],
+                        boxShadow: isCancelled
+                            ? null
+                            : [
+                                BoxShadow(
+                                  color: routeColor,
+                                  spreadRadius: 2,
+                                ),
+                              ],
                       ),
-                      child: ListTile(
-                        onTap: () async {
-                          await Navigator.pushNamed(
-                            _scaffoldkey.currentContext,
-                            '/servicemap',
-                            arguments: ServiceMapArguments(
-                              route[0]['route_id'].toString(),
-                              stopInfo,
-                            ),
-                          );
-                        },
-                        contentPadding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          bottom: 2,
-                          top: 2,
-                        ),
-                        title: Column(
-                          children: <Widget>[
-                            Visibility(
-                              visible: index == _firstDateIdx,
-                              child: Text(
-                                _formattedDate,
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: routeColor,
-                                      shape: BoxShape.circle,
+                      child: Opacity(
+                        opacity: isCancelled ? .4 : 1,
+                        child: ListTile(
+                          onTap: isCancelled
+                              ? null
+                              : () async {
+                                  await Navigator.pushNamed(
+                                    _scaffoldkey.currentContext,
+                                    '/servicemap',
+                                    arguments: ServiceMapArguments(
+                                      route[0]['route_id'].toString(),
+                                      stopInfo,
                                     ),
-                                    margin: const EdgeInsets.only(right: 10),
-                                    child: Center(
+                                  );
+                                },
+                          contentPadding: const EdgeInsets.only(
+                            left: 10,
+                            right: 10,
+                            bottom: 2,
+                            top: 2,
+                          ),
+                          title: Column(
+                            children: <Widget>[
+                              Visibility(
+                                visible: index == _firstDateIdx,
+                                child: Text(
+                                  _formattedDate,
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: routeColor,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      margin: const EdgeInsets.only(right: 10),
+                                      child: Center(
+                                        child: Text(
+                                          // Read the name field value and set it in the Text widget
+                                          service['service_id'].toString(),
+                                          textAlign: TextAlign.center,
+                                          // set some style to text
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color:
+                                                routeTextColor == Colors.black
+                                                    ? Colors.white
+                                                    : routeTextColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
                                       child: Text(
-                                        // Read the name field value and set it in the Text widget
-                                        service['service_id'].toString(),
-                                        textAlign: TextAlign.center,
-                                        // set some style to text
+                                        service['destination']['name']
+                                            .toString(),
+                                        textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: routeTextColor == Colors.black
-                                              ? Colors.white
-                                              : routeTextColor,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      service['destination']['name'].toString(),
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: isWheelChairAccessble,
-                                    child: Container(
-                                      width: 35,
-                                      height: 35,
-                                      margin: const EdgeInsets.only(left: 5),
-                                      child: IconButton(
-                                        iconSize: 20,
-                                        icon: Icon(
-                                          Icons.accessible_forward,
-                                          color: routeColor,
-                                        ),
-                                        onPressed: null,
-                                      ),
-                                    ),
-                                  ),
-                                  isCancelled
-                                      ? Container(
-                                          child: Text(
-                                            'CANCELLED',
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                            ),
+                                    Visibility(
+                                      visible: isWheelChairAccessble,
+                                      child: Container(
+                                        width: 35,
+                                        height: 35,
+                                        margin: const EdgeInsets.only(left: 5),
+                                        child: IconButton(
+                                          iconSize: 20,
+                                          icon: Icon(
+                                            Icons.accessible_forward,
+                                            color: routeColor,
                                           ),
-                                        )
-                                      : Column(
-                                          children: [
-                                            Container(
-                                              width: 75,
-                                              height: 30,
-                                              margin: const EdgeInsets.only(
-                                                left: 5,
-                                                bottom: 5,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  !isExpected
-                                                      ? isDue
-                                                          ? 'Due'
-                                                          : '${departureDuration.inMinutes} mins'
-                                                      : isDue
-                                                          ? 'Due'
-                                                          : Utils.setTime(
-                                                              _time),
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
+                                          onPressed: null,
+                                        ),
+                                      ),
+                                    ),
+                                    isCancelled
+                                        ? Container(
+                                            width: 120,
+                                            height: 30,
+                                            margin: const EdgeInsets.only(
+                                              left: 5,
+                                              bottom: 5,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                'CANCELLED',
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  fontSize: 16,
                                                 ),
                                               ),
                                             ),
-                                            // isOnTime
-                                            //     ? Container()
-                                            //     : Container(
-                                            //         width: 75,
-                                            //         height: 30,
-                                            //         margin:
-                                            //             const EdgeInsets.only(
-                                            //           left: 5,
-                                            //           top: 5,
-                                            //         ),
-                                            //         decoration: BoxDecoration(
-                                            //           color: Utils
-                                            //               .calculateStatusColour(
-                                            //             service['status']
-                                            //                 .toString(),
-                                            //           ),
-                                            //           borderRadius:
-                                            //               BorderRadius.circular(
-                                            //                   15),
-                                            //         ),
-                                            //         child: Center(
-                                            //           child: Text(
-                                            //             !isExpected
-                                            //                 ? service['status']
-                                            //                     .toString()
-                                            //                     .capitalise()
-                                            //                 : 'SCHED',
-                                            //             textAlign:
-                                            //                 TextAlign.left,
-                                            //             style: TextStyle(
-                                            //               fontSize: 16,
-                                            //               color: Colors
-                                            //                   .blueGrey[800],
-                                            //             ),
-                                            //           ),
-                                            //         ),
-                                            //       ),
-                                          ],
-                                        ),
-                                ],
+                                          )
+                                        : Column(
+                                            children: [
+                                              Container(
+                                                width: 75,
+                                                height: 30,
+                                                margin: const EdgeInsets.only(
+                                                  left: 5,
+                                                  bottom: 5,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    !isExpected
+                                                        ? isDue
+                                                            ? 'Due'
+                                                            : '${departureDuration.inMinutes} mins'
+                                                        : isDue
+                                                            ? 'Due'
+                                                            : Utils.setTime(
+                                                                _time),
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );
