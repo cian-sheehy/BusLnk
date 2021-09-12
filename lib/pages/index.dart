@@ -63,6 +63,7 @@ class _IndexPageState extends State<IndexPage> {
 
   void onBottomNavTapped(int index) {
     setState(() {
+      _clearSearch();
       _currentIndex = index;
       if (_currentIndex == 1 && (stops.isEmpty)) {
         fetchStopList();
@@ -421,7 +422,6 @@ class _IndexPageState extends State<IndexPage> {
                               );
                             }
                           });
-                          _clearSearch();
                         },
                         icon: Icon(
                           stopExistsInFavourites
@@ -542,7 +542,6 @@ class _IndexPageState extends State<IndexPage> {
                               stop['stop_id'].toString(),
                             );
                           }
-                          _clearSearch();
                         });
                       },
                       icon: Icon(
