@@ -196,7 +196,9 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                     var currentIndex = index + 1;
                     var text =
                         alerts[index]['header_text']['translation'][0]['text'];
-                    var url = alerts[index]['url']['translation'][0]['text'];
+                    var doesUrlExist = alerts[index].containsKey('url') as bool;
+                    var url = doesUrlExist ??
+                        alerts[index]['url']['translation'][0]['text'];
                     var severityLevel = alerts[index]['severity_level'];
 
                     return Card(
@@ -207,7 +209,13 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                         padding: const EdgeInsets.all(5),
                         width: MediaQuery.of(context).size.width * 0.95,
                         child: TextButton.icon(
-                          onPressed: () => {Utils.launchURL(url)},
+                          onPressed: doesUrlExist
+                              ? () => {
+                                    Utils.launchURL(
+                                      url,
+                                    )
+                                  }
+                              : null,
                           icon: Icon(
                             Icons.error_outline,
                             color: Colors.white,
