@@ -284,7 +284,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                     var isWheelChairAccessble =
                         service['wheelchair_accessible'] as bool;
 
-                    var _formattedDate = DateFormat('EEE, MMM d').format(
+                    var _formattedDate = DateFormat('EEE, d MMM').format(
                       DateTime.parse(
                         service['departure']['aimed'].toString(),
                       ).toLocal(),
