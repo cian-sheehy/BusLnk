@@ -56,6 +56,18 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  int severitySortOrder(String severity) {
+    switch (severity) {
+      case 'SEVERE':
+        return 1;
+      case 'WARNING':
+        return 2;
+      case 'INFO':
+      default:
+        return 3;
+    }
+  }
+
   void fetchStop() async {
     if (mounted) {
       setState(() {
@@ -108,6 +120,8 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                       .toList()
                       .where((id) => a['route_id'] == id);
                   if (ele.length >= 1 && !alerts.contains(alert)) {
+                    alert['severitySortOrder'] =
+                        severitySortOrder(alert['severity_level']);
                     alerts.add(alert);
                     return true;
                   }
@@ -117,6 +131,8 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
             }
           }
         }
+        alerts.sort(
+            (a, b) => a['severitySortOrder'].compareTo(b['severitySortOrder']));
         isLoading = false;
       });
     }
