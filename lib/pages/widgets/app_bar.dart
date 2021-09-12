@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../maps/stop_map.dart';
 
