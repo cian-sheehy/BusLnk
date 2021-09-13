@@ -186,6 +186,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
           popupOptions: PopupOptions(
             popupController: _popupController,
             popupBuilder: (_, marker) => Container(
+              color: Colors.transparent,
               width: 200,
               height: 100,
               child: Card(
@@ -195,7 +196,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
                   trailing: IconButton(
                     icon: Icon(
                       Icons.open_in_browser_rounded,
-                      color: Theme.of(context).toggleButtonsTheme.selectedColor,
+                      color: Theme.of(context).buttonColor,
                     ),
                     onPressed: () async {
                       var stop = mapMarkers[marker];

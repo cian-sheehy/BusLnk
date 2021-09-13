@@ -156,7 +156,7 @@ class StopsMapWidgetState extends State<StopsMapWidget>
             popupController: _popupController,
             popupBuilder: (_, marker) => Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(15),
               ),
               width: 200,
@@ -168,7 +168,7 @@ class StopsMapWidgetState extends State<StopsMapWidget>
                   trailing: IconButton(
                     icon: Icon(
                       Icons.open_in_browser_rounded,
-                      color: Theme.of(context).toggleButtonsTheme.selectedColor,
+                      color: Theme.of(context).buttonColor,
                     ),
                     onPressed: () async {
                       var stop = mapMarkers[marker];
