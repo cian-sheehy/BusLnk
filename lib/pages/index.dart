@@ -76,6 +76,10 @@ class _IndexPageState extends State<IndexPage> {
 
   Widget _buildPopupDialog(BuildContext context) => AlertDialog(
         title: Text('Edit stop name'),
+        titlePadding: EdgeInsets.all(15),
+        buttonPadding: EdgeInsets.all(5),
+        actionsPadding: EdgeInsets.all(0),
+        contentPadding: EdgeInsets.all(15),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,17 +90,26 @@ class _IndexPageState extends State<IndexPage> {
               controller: _popUpTextController,
               decoration: InputDecoration(
                 hintText: 'Enter custom name',
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).buttonColor,
+                    width: 2,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).buttonColor,
+                    width: 2,
+                  ),
+                ),
+                border: OutlineInputBorder(),
               ),
             )
           ],
         ),
         actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Close'),
-          ),
           TextButton(
             onPressed: () {
               setState(() {
@@ -112,7 +125,17 @@ class _IndexPageState extends State<IndexPage> {
                 Navigator.of(context).pop();
               }
             },
-            child: Text('Save'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                Theme.of(context).buttonColor,
+              ),
+            ),
+            child: Text(
+              'Save',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       );
@@ -161,6 +184,7 @@ class _IndexPageState extends State<IndexPage> {
         currentIndex: _currentIndex,
         onTap: onBottomNavTapped,
         selectedFontSize: 15,
+        selectedItemColor: Theme.of(context).buttonColor,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
@@ -399,9 +423,7 @@ class _IndexPageState extends State<IndexPage> {
                         },
                         icon: Icon(
                           Icons.edit,
-                          color: Theme.of(context)
-                              .toggleButtonsTheme
-                              .selectedColor,
+                          color: Theme.of(context).buttonColor,
                         ),
                       ),
                       leadingIcon: IconButton(
@@ -503,6 +525,7 @@ class _IndexPageState extends State<IndexPage> {
                         },
                         icon: Icon(
                           Icons.clear_rounded,
+                          color: Theme.of(context).buttonColor,
                         ),
                       ),
               ),
@@ -526,7 +549,7 @@ class _IndexPageState extends State<IndexPage> {
                     subtitle: stop['stop_id'].toString(),
                     leadingIcon: Icon(
                       Icons.directions_bus_rounded,
-                      color: Theme.of(context).toggleButtonsTheme.selectedColor,
+                      color: Theme.of(context).buttonColor,
                       size: 30,
                     ),
                     trailingIcon: IconButton(
@@ -621,6 +644,7 @@ class _IndexPageState extends State<IndexPage> {
                         },
                         icon: Icon(
                           Icons.clear_rounded,
+                          color: Theme.of(context).buttonColor,
                         ),
                       ),
               ),

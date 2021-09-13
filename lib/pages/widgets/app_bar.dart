@@ -14,6 +14,8 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
 
   Widget _buildPopupDialog(BuildContext context) => AlertDialog(
         contentPadding: EdgeInsets.all(5),
+        titlePadding: EdgeInsets.all(0),
+        actionsPadding: EdgeInsets.all(0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(20),
@@ -28,12 +30,11 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
           label: Text(
             'Service alert information',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               color: Theme.of(context).textTheme.headline2.color,
             ),
           ),
         ),
-        backgroundColor: Theme.of(context).primaryColor,
         content: Container(
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
@@ -100,10 +101,15 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                Theme.of(context).buttonColor,
+              ),
+            ),
             child: Text(
               'Close',
               style: TextStyle(
-                color: Theme.of(context).textTheme.headline2.color,
+                color: Colors.white,
               ),
             ),
           ),

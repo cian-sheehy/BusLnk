@@ -173,6 +173,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
             icon: Icon(
               Icons.map_rounded,
               size: 30,
+              color: Theme.of(context).buttonColor,
             ),
             onPressed: () async {
               await Navigator.pushNamed(

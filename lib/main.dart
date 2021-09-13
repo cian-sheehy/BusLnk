@@ -78,7 +78,6 @@ class MainAppState extends State<MainApp> {
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: Colors.blueGrey[800],
-          primarySwatch: Colors.orange,
           textTheme: TextTheme(
             headline1: TextStyle(
               color: Colors.blueGrey[300],
