@@ -14,7 +14,11 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
 
   Widget _buildPopupDialog(BuildContext context) => AlertDialog(
         contentPadding: EdgeInsets.all(5),
-        scrollable: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
         title: TextButton.icon(
           onPressed: null,
           icon: Icon(
@@ -29,11 +33,11 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
             ),
           ),
         ),
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).primaryColor,
         content: Container(
-          height: MediaQuery.of(context).size.height / 2,
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
+            shrinkWrap: true,
             itemCount: alerts.length,
             itemBuilder: (BuildContext context, int index) {
               var header =
@@ -42,45 +46,51 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
                   alerts[index]['description_text']['translation'][0]['text'];
               var doesUrlExist = alerts[index].containsKey('url') as bool;
               var severityLevel = alerts[index]['severity_level'];
-              return Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(
-                  top: 6,
-                  bottom: 6,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.only(
-                      left: 5,
-                      right: 5,
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(
+                      top: 6,
+                      bottom: 6,
                     ),
-                    onTap: doesUrlExist
-                        ? () {
-                            var url =
-                                alerts[index]['url']['translation'][0]['text'];
-                            Utils.launchURL(
-                              url.toString(),
-                            );
-                          }
-                        : null,
-                    title: Text(
-                      header,
-                      style: TextStyle(
-                        color: Utils.calculateBannerAlertColour(severityLevel),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.only(
+                          left: 5,
+                          right: 5,
+                        ),
+                        onTap: doesUrlExist
+                            ? () {
+                                var url = alerts[index]['url']['translation'][0]
+                                    ['text'];
+                                Utils.launchURL(
+                                  url.toString(),
+                                );
+                              }
+                            : null,
+                        title: Text(
+                          header,
+                          style: TextStyle(
+                            color:
+                                Utils.calculateBannerAlertColour(severityLevel),
+                          ),
+                        ),
+                        subtitle: Text(
+                          description,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).textTheme.subtitle1.color,
+                          ),
+                        ),
                       ),
                     ),
-                    subtitle: Text(
-                      description,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).textTheme.subtitle1.color,
-                      ),
-                    ),
                   ),
-                ),
+                ],
               );
             },
           ),
