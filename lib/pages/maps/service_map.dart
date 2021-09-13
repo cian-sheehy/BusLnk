@@ -120,7 +120,7 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
   @override
   Widget build(BuildContext context) => Scaffold(
         key: _scaffoldkey,
-        appBar: AppBarWidget(),
+        appBar: AppBarWidget(null),
         body: getBody(),
       );
 

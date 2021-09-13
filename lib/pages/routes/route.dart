@@ -96,7 +96,7 @@ class RouteWidgetState extends State<RouteWidget>
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBarWidget(),
+        appBar: AppBarWidget(null),
         body: RefreshIndicator(
           backgroundColor: Theme.of(context).cardColor,
           color: Theme.of(context).toggleButtonsTheme.selectedColor,

@@ -155,7 +155,7 @@ class _IndexPageState extends State<IndexPage> {
 
     return Scaffold(
       key: _scaffoldkey,
-      appBar: AppBarWidget(),
+      appBar: AppBarWidget(null),
       drawer: NavDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

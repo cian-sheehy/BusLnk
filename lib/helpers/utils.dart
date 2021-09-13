@@ -136,4 +136,16 @@ class Utils {
         return Colors.blueGrey[400];
     }
   }
+
+  static int severitySortOrder(String severity) {
+    switch (severity) {
+      case 'SEVERE':
+        return 1;
+      case 'WARNING':
+        return 2;
+      case 'INFO':
+      default:
+        return 3;
+    }
+  }
 }

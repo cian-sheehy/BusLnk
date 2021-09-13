@@ -96,7 +96,7 @@ class StopsMapWidgetState extends State<StopsMapWidget>
   @override
   Widget build(BuildContext context) => Scaffold(
         key: _scaffoldkey,
-        appBar: AppBarWidget(),
+        appBar: AppBarWidget(null),
         body: getBody(),
       );
 
