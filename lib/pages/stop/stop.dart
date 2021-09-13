@@ -293,9 +293,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                 height: 60,
                 width: MediaQuery.of(context).size.width - 10,
                 child: Card(
-                  color: Utils.calculateBannerAlertColour(
-                    alerts[0]['severity_level'],
-                  ),
+                  color: Colors.orange[600],
                   child: ListTile(
                     onTap: () {
                       showDialog(
