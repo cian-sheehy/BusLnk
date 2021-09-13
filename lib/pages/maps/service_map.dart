@@ -147,14 +147,13 @@ class ServiceMapWidgetState extends State<ServiceMapWidget>
       ),
       layers: [
         TileLayerOptions(
-          // https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png
-          // https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
-          urlTemplate: 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
-          subdomains: [
-            'a',
-            'b',
-            'c',
-          ],
+          urlTemplate:
+              'https://api.mapbox.com/styles/v1/buslnk/cktj6udbk040r17qw734nnw37/tiles/256/{z}/{x}/{y}@2x?access_token=sk.eyJ1IjoiYnVzbG5rIiwiYSI6ImNrdGo4anRwejE5bzcydXBhZzQwOGw0bXoifQ.lIhu3ETYdoy6GWIHESPhfQ',
+          additionalOptions: {
+            'accessToken':
+                'sk.eyJ1IjoiYnVzbG5rIiwiYSI6ImNrdGo4anRwejE5bzcydXBhZzQwOGw0bXoifQ.lIhu3ETYdoy6GWIHESPhfQ',
+            'id': 'mapbox.mapbox-streets-v8',
+          },
         ),
         // PolylineLayerOptions(
         //   polylines: polyLines,
