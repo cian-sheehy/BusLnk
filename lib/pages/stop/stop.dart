@@ -244,55 +244,60 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                       _newFormattedDate = _formattedDate;
                       _firstDateIdx = index;
                     }
-                    return Container(
-                      margin: EdgeInsets.only(
-                        bottom: 15,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                        boxShadow: isCancelled
-                            ? null
-                            : [
-                                BoxShadow(
-                                  color: routeColor,
-                                  spreadRadius: 2,
-                                ),
-                              ],
-                      ),
-                      child: Opacity(
-                        opacity: isCancelled ? .4 : 1,
-                        child: ListTile(
-                          onTap: isCancelled
-                              ? null
-                              : () async {
-                                  await Navigator.pushNamed(
-                                    _scaffoldkey.currentContext,
-                                    '/servicemap',
-                                    arguments: ServiceMapArguments(
-                                      route[0]['route_id'].toString(),
-                                      stopInfo,
-                                    ),
-                                  );
-                                },
-                          contentPadding: const EdgeInsets.only(
-                            left: 10,
-                            right: 10,
-                            bottom: 2,
-                            top: 2,
+                    return Column(
+                      children: [
+                        Visibility(
+                          visible: index == _firstDateIdx,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              bottom: 15,
+                            ),
+                            child: Text(
+                              _formattedDate,
+                              textAlign: TextAlign.left,
+                            ),
                           ),
-                          title: Column(
-                            children: <Widget>[
-                              Visibility(
-                                visible: index == _firstDateIdx,
-                                child: Text(
-                                  _formattedDate,
-                                  textAlign: TextAlign.left,
-                                ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            bottom: 15,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                            boxShadow: isCancelled
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: routeColor,
+                                      spreadRadius: 2,
+                                    ),
+                                  ],
+                          ),
+                          child: Opacity(
+                            opacity: isCancelled ? .4 : 1,
+                            child: ListTile(
+                              onTap: isCancelled
+                                  ? null
+                                  : () async {
+                                      await Navigator.pushNamed(
+                                        _scaffoldkey.currentContext,
+                                        '/servicemap',
+                                        arguments: ServiceMapArguments(
+                                          route[0]['route_id'].toString(),
+                                          stopInfo,
+                                        ),
+                                      );
+                                    },
+                              contentPadding: const EdgeInsets.only(
+                                left: 10,
+                                right: 10,
+                                bottom: 2,
+                                top: 2,
                               ),
-                              Padding(
+                              title: Padding(
                                 padding: const EdgeInsets.all(0),
                                 child: Row(
                                   children: <Widget>[
@@ -399,10 +404,10 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                                   ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     );
                   }).toList(),
                 ),
