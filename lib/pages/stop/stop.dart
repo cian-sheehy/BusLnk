@@ -299,7 +299,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                       );
                     },
                     title: Text(
-                      '${alerts.length} alerts affecting bus routes',
+                      '${alerts.length} ${alerts.length == 1 ? "alert" : "alerts"} affecting these routes',
                       style: TextStyle(
                         color: Colors.white,
                       ),
