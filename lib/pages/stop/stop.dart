@@ -92,10 +92,11 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
           child: ListView.builder(
             itemCount: alerts.length,
             itemBuilder: (BuildContext context, int index) {
-              var text = alerts[index]['header_text']['translation'][0]['text'];
+              var header =
+                  alerts[index]['header_text']['translation'][0]['text'];
+              var description =
+                  alerts[index]['description_text']['translation'][0]['text'];
               var doesUrlExist = alerts[index].containsKey('url') as bool;
-              var url = doesUrlExist ??
-                  alerts[index]['url']['translation'][0]['text'];
               var severityLevel = alerts[index]['severity_level'];
               return Container(
                 alignment: Alignment.centerLeft,
@@ -107,27 +108,31 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: TextButton.icon(
-                    onPressed: doesUrlExist
-                        ? () => {
-                              Utils.launchURL(
-                                url,
-                              )
-                            }
-                        : null,
-                    icon: Icon(
-                      Icons.error_outline,
-                      color: Utils.calculateBannerAlertColour(severityLevel),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.only(
+                      left: 5,
+                      right: 5,
                     ),
-                    label: Flexible(
-                      child: Text(
-                        text,
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Theme.of(context).textTheme.headline2.color,
-                        ),
+                    onTap: doesUrlExist
+                        ? () {
+                            var url =
+                                alerts[index]['url']['translation'][0]['text'];
+                            Utils.launchURL(
+                              url.toString(),
+                            );
+                          }
+                        : null,
+                    title: Text(
+                      header,
+                      style: TextStyle(
+                        color: Utils.calculateBannerAlertColour(severityLevel),
+                      ),
+                    ),
+                    subtitle: Text(
+                      description,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).textTheme.subtitle1.color,
                       ),
                     ),
                   ),
@@ -307,17 +312,6 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                     leading: Icon(
                       Icons.error_outline,
                       color: Colors.white,
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.arrow_right,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: _buildPopupDialog,
-                        );
-                      },
                     ),
                   ),
                 ),

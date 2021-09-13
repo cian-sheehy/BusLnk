@@ -64,7 +64,6 @@ class CardWidgetState extends State<CardWidget> with TickerProviderStateMixin {
         width: MediaQuery.of(context).size.width - 10,
         child: Card(
           key: key,
-          shadowColor: Theme.of(context).cardTheme.shadowColor,
           shape: Theme.of(context).cardTheme.shape,
           child: ListTile(
             onLongPress: longPressCallback,

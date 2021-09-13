@@ -49,7 +49,6 @@ class MainAppState extends State<MainApp> {
           ),
           buttonColor: Colors.teal[800],
           cardTheme: CardTheme(
-            shadowColor: Colors.blueGrey[800],
             elevation: 2.5,
             color: Colors.white,
             shape: RoundedRectangleBorder(
@@ -100,7 +99,6 @@ class MainAppState extends State<MainApp> {
             splashRadius: 3,
           ),
           cardTheme: CardTheme(
-            shadowColor: Colors.purple[100],
             elevation: 2.5,
             color: Colors.blueGrey[800],
             shape: RoundedRectangleBorder(
