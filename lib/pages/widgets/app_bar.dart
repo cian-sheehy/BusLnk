@@ -139,6 +139,7 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
               : Container(),
           ModalRoute.of(context).settings.name == '/map' ||
                   ModalRoute.of(context).settings.name == '/stop' ||
+                  ModalRoute.of(context).settings.name == '/' ||
                   ModalRoute.of(context).settings.name == '/servicemap'
               ? Container()
               : IconButton(
@@ -154,6 +155,7 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
                           -41.276825,
                           174.777969,
                         ),
+                        true,
                         true,
                       ),
                     );

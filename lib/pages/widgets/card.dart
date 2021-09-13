@@ -62,6 +62,7 @@ class CardWidgetState extends State<CardWidget> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) => Container(
         width: MediaQuery.of(context).size.width - 10,
+        color: Colors.transparent,
         child: Card(
           key: key,
           shape: Theme.of(context).cardTheme.shape,

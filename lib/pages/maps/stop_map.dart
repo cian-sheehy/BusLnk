@@ -14,10 +14,12 @@ import '../widgets/page_loading_dots.dart';
 class StopsMapArguments {
   final LatLng location;
   final bool isMap;
+  final bool isStop;
 
   StopsMapArguments(
     this.location,
     this.isMap,
+    this.isStop,
   );
 }
 
@@ -96,7 +98,7 @@ class StopsMapWidgetState extends State<StopsMapWidget>
   @override
   Widget build(BuildContext context) => Scaffold(
         key: _scaffoldkey,
-        appBar: AppBarWidget(null),
+        appBar: widget.arguments.isStop ? AppBarWidget(null) : null,
         body: getBody(),
       );
 

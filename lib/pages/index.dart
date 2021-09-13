@@ -2,12 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy/fuzzy.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../constants/config.dart';
 import '../datamodels/favourites.dart';
 import '../helpers/requests.dart';
 import '../helpers/utils.dart';
 import 'maps/service_map.dart';
+import 'maps/stop_map.dart';
 import 'stop/stop.dart';
 import 'widgets/app_bar.dart';
 import 'widgets/card.dart';
@@ -174,7 +176,21 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    var _currentPage = [getFavouriteBody(), getStopBody(), getRouteBody()];
+    var _currentPage = [
+      getFavouriteBody(),
+      getStopBody(),
+      getRouteBody(),
+      StopsMapWidget(
+        StopsMapArguments(
+          LatLng(
+            -41.276825,
+            174.777969,
+          ),
+          true,
+          false,
+        ),
+      )
+    ];
 
     return Scaffold(
       key: _scaffoldkey,
@@ -184,7 +200,9 @@ class _IndexPageState extends State<IndexPage> {
         currentIndex: _currentIndex,
         onTap: onBottomNavTapped,
         selectedFontSize: 15,
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).buttonColor,
+        unselectedFontSize: 10,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
@@ -207,6 +225,12 @@ class _IndexPageState extends State<IndexPage> {
               _currentIndex == 2 ? Icons.alt_route : Icons.alt_route_outlined,
             ),
             label: 'Routes',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              _currentIndex == 3 ? Icons.map : Icons.map_outlined,
+            ),
+            label: 'Maps',
           ),
         ],
       ),

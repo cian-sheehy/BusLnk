@@ -185,6 +185,7 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                     stopInfo['stop_lon'],
                   ),
                   false,
+                  true,
                 ),
               );
             },
