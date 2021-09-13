@@ -377,9 +377,8 @@ class StopWidgetState extends State<StopWidget> with TickerProviderStateMixin {
                       ),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(25),
-                          topRight: Radius.circular(25),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
                         ),
                         boxShadow: isCancelled
                             ? null

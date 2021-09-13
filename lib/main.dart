@@ -52,9 +52,8 @@ class MainAppState extends State<MainApp> {
             elevation: 2.5,
             color: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25),
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
               ),
             ),
           ),
@@ -102,9 +101,8 @@ class MainAppState extends State<MainApp> {
             elevation: 2.5,
             color: Colors.blueGrey[800],
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25),
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
               ),
             ),
           ),
