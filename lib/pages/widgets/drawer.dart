@@ -88,26 +88,27 @@ class NavDrawerState extends State<NavDrawer> {
                   ),
                 ),
               ),
-              Card(
-                child: ListTile(
-                  leading: Text(
-                    'About',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Text(
-                    'Help',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
+              // TODO - Remove About and Help for now
+              // Card(
+              //   child: ListTile(
+              //     leading: Text(
+              //       'About',
+              //       style: TextStyle(
+              //         fontSize: 18,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Card(
+              //   child: ListTile(
+              //     leading: Text(
+              //       'Help',
+              //       style: TextStyle(
+              //         fontSize: 18,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.only(
