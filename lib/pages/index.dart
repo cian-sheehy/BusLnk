@@ -282,22 +282,23 @@ class _IndexPageState extends State<IndexPage> {
         },
         child: _currentPage[_currentIndex],
       ),
-      floatingActionButton: _currentIndex == 0
-          ? FloatingActionButton(
-              heroTag: 'favourite_hero_tag',
-              onPressed: () {
-                // Add your onPressed code here!
-                setState(() {
-                  _clearStorage();
-                  fetchStopList();
-                });
-              },
-              backgroundColor: Theme.of(context).buttonColor,
-              child: Icon(
-                Icons.delete,
-              ),
-            )
-          : null,
+      // TODO - More this somewhere better
+      // floatingActionButton: _currentIndex == 0
+      //     ? FloatingActionButton(
+      //         heroTag: 'favourite_hero_tag',
+      //         onPressed: () {
+      //           // Add your onPressed code here!
+      //           setState(() {
+      //             _clearStorage();
+      //             fetchStopList();
+      //           });
+      //         },
+      //         backgroundColor: Theme.of(context).buttonColor,
+      //         child: Icon(
+      //           Icons.delete,
+      //         ),
+      //       )
+      //     : null,
     );
   }
 
