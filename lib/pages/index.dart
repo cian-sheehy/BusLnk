@@ -113,32 +113,69 @@ class _IndexPageState extends State<IndexPage> {
           ],
         ),
         actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _popUpTextController.text.isEmpty
-                    ? _validate = true
-                    : _validate = false;
-              });
-              if (!_validate) {
-                _updateItem(
-                  _editingFavItem,
-                  _popUpTextController.text.trim(),
-                );
-                Navigator.of(context).pop();
-              }
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                Theme.of(context).buttonColor,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 10,
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _removeItem(
+                        _editingFavItem.stopName.toString(),
+                        _editingFavItem.stopNum.toString(),
+                      );
+                      Navigator.of(context).pop();
+                    });
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Colors.red,
+                    ),
+                  ),
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            child: Text(
-              'Save',
-              style: TextStyle(
-                color: Colors.white,
+              Container(
+                padding: EdgeInsets.only(
+                  right: 10,
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _popUpTextController.text.isEmpty
+                          ? _validate = true
+                          : _validate = false;
+                    });
+                    if (!_validate) {
+                      _updateItem(
+                        _editingFavItem,
+                        _popUpTextController.text.trim(),
+                      );
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Theme.of(context).buttonColor,
+                    ),
+                  ),
+                  child: Text(
+                    'Save',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ],
       );
