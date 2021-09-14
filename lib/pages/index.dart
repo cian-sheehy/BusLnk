@@ -210,14 +210,45 @@ class _IndexPageState extends State<IndexPage> {
     });
   }
 
+  void _onHorizontalDrag(DragEndDetails details) {
+    if (details.primaryVelocity == 0) {
+      return;
+    } // user have just tapped on screen (no dragging)
+
+    if (details.primaryVelocity.compareTo(0) == -1) {
+      print('dragged from left');
+      setState(() {
+        if (_currentIndex < 3) {
+          _currentIndex++;
+        }
+      });
+    } else {
+      print('dragged from right');
+      setState(() {
+        if (_currentIndex > 0) {
+          _currentIndex--;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var preBackpress = DateTime.now();
 
     var _currentPage = [
-      getFavouriteBody(),
-      getStopBody(),
-      getRouteBody(),
+      GestureDetector(
+        onHorizontalDragEnd: _onHorizontalDrag,
+        child: getFavouriteBody(),
+      ),
+      GestureDetector(
+        onHorizontalDragEnd: _onHorizontalDrag,
+        child: getStopBody(),
+      ),
+      GestureDetector(
+        onHorizontalDragEnd: _onHorizontalDrag,
+        child: getRouteBody(),
+      ),
       StopsMapWidget(
         StopsMapArguments(
           null,
