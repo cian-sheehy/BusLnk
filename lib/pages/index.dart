@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy/fuzzy.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
 
 import '../constants/config.dart';
 import '../datamodels/favourites.dart';
@@ -214,6 +212,8 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+    var preBackpress = DateTime.now();
+
     var _currentPage = [
       getFavouriteBody(),
       getStopBody(),
@@ -269,18 +269,36 @@ class _IndexPageState extends State<IndexPage> {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        backgroundColor: Theme.of(context).cardColor,
-        color: Theme.of(context).toggleButtonsTheme.selectedColor,
-        onRefresh: () async {
-          if (_currentIndex == 1) {
-            fetchStopList();
-          }
-          if (_currentIndex == 2) {
-            fetchRouteList();
+      body: WillPopScope(
+        onWillPop: () async {
+          final timegap = DateTime.now().difference(preBackpress);
+          final cantExit = timegap >= Duration(seconds: 2);
+          preBackpress = DateTime.now();
+          if (cantExit) {
+            //show snackbar
+            final snack = SnackBar(
+              content: Text('Press Back button again to Exit'),
+              duration: Duration(seconds: 2),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snack);
+            return false; // false will do nothing when back press
+          } else {
+            return true; // true will exit the app
           }
         },
-        child: _currentPage[_currentIndex],
+        child: RefreshIndicator(
+          backgroundColor: Theme.of(context).cardColor,
+          color: Theme.of(context).toggleButtonsTheme.selectedColor,
+          onRefresh: () async {
+            if (_currentIndex == 1) {
+              fetchStopList();
+            }
+            if (_currentIndex == 2) {
+              fetchRouteList();
+            }
+          },
+          child: _currentPage[_currentIndex],
+        ),
       ),
       // TODO - More this somewhere better
       // floatingActionButton: _currentIndex == 0
