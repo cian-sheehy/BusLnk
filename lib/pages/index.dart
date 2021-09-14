@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy/fuzzy.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../constants/config.dart';
@@ -182,10 +183,7 @@ class _IndexPageState extends State<IndexPage> {
       getRouteBody(),
       StopsMapWidget(
         StopsMapArguments(
-          LatLng(
-            -41.276825,
-            174.777969,
-          ),
+          null,
           true,
           false,
         ),
