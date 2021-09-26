@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:fuzzy/fuzzy.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../constants/config.dart';
 import '../datamodels/favourites.dart';
@@ -216,14 +217,12 @@ class _IndexPageState extends State<IndexPage> {
     } // user have just tapped on screen (no dragging)
 
     if (details.primaryVelocity.compareTo(0) == -1) {
-      print('dragged from left');
       setState(() {
         if (_currentIndex < 3) {
           _currentIndex++;
         }
       });
     } else {
-      print('dragged from right');
       setState(() {
         if (_currentIndex > 0) {
           _currentIndex--;
@@ -251,8 +250,10 @@ class _IndexPageState extends State<IndexPage> {
       ),
       StopsMapWidget(
         StopsMapArguments(
-          null,
-          true,
+          LatLng(
+            -41.276825,
+            174.777969,
+          ),
           false,
         ),
       )

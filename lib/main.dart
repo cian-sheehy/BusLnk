@@ -32,6 +32,9 @@ class MainAppState extends State<MainApp> {
     myTheme.addListener(() {
       setState(() {});
     });
+    locationUtils.addListener(() {
+      setState(() {});
+    });
   }
 
   @override

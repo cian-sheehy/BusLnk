@@ -1,7 +1,8 @@
+import 'package:bus_lnk/utilities/location.dart';
 import 'package:dio/dio.dart';
 import 'package:localstorage/localstorage.dart';
 
-import '../themes/theme.dart';
+import '../utilities/theme.dart';
 
 const openApiGtsBaseUrl = 'https://api.opendata.metlink.org.nz/v1/gtfs';
 const openApiBaseUrl = 'https://api.opendata.metlink.org.nz/v1';
@@ -17,4 +18,5 @@ Options headerOptions = Options(
 );
 
 MyTheme myTheme = MyTheme();
+LocationUtilities locationUtils = LocationUtilities();
 final LocalStorage storage = LocalStorage('BusLnk');

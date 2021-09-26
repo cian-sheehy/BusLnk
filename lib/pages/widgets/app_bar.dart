@@ -156,7 +156,6 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
                           174.777969,
                         ),
                         true,
-                        true,
                       ),
                     );
                   },
