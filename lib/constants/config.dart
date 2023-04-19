@@ -13,7 +13,7 @@ Options headerOptions = Options(
   headers: {
     'Content-type': 'application/json',
     'Accept': 'application/json',
-    'x-api-key': '766wnmFs3m3wpgAEm2qjR6LNRs5J6uhg6tCHxkpH'
+    'x-api-key': String.fromEnvironment('API_KEY')
   },
 );
 
